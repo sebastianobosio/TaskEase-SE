@@ -1,0 +1,6 @@
+INDEX VERSION 1.134+/home/sebastiano/Documents/dev/project_SE/TaskEase-SE/code/.metadata/.plugins/org.eclipse.jdt.core
+1521508707.index
+1855045645.index
+1208491697.index
+1865797976.index
+4172115064.index

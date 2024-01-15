@@ -1,5 +1,7 @@
 # Compiled class file
 *.class
+./code/.metadata/
+./code/TaskEase/target/
 
 # Log file
 *.log
