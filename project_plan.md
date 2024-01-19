@@ -13,8 +13,7 @@ Per iniziare verrà creato un prototipo di base che verrà migliorato tramite mi
 aumenteranno le funzionalità. 
 Per tenere traccia dello stato del progetto, dei bug e delle funzionalità da aggiungere verranno usati gli issues 
 di Github. Mano a mano le issue saranno prese in carico e chiuse.
-Per simulare una suddivisione delle attività l'account @sebastianobosio si occuperà del modello e della 
-persistenza dei dati, mentre l'altro account (@sebastianobosioAlias) si occuperà dell'interfaccia utente e del controller.
+Per simulare una suddivisione delle attività l'account @sebastianobosio si occuperà del modello e dell'interfaccia utente, mentre l'altro account (@sebastianobosioAlias) si occuperà della parte di controllo e dell'interazione con il database.
 
 ## Organizzazione del progetto
 Come detto prima l'unica persona coinvolta nello sviluppo del progetto è il sottoscritto.
