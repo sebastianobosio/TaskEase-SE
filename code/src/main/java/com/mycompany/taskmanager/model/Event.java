@@ -1,4 +1,4 @@
-package com.mycompany.taskmanager;
+package com.mycompany.taskmanager.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
