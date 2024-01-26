@@ -9,6 +9,19 @@ public class Task {
 		NOTSTARTED,	
 	}
 	
+	private String title;
+	private String description;
+	private Date dueDate;
+	private TaskStatus status;
+	
+	// Constructor
+	public Task(String title, String description, Date dueDate, TaskStatus status) {
+		this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.status = status;
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -41,18 +54,4 @@ public class Task {
 		this.status = status;
 	}
 
-	private String title;
-	private String description;
-	private Date dueDate;
-	private TaskStatus status;
-	
-	// Constructor
-	public Task(String title, String description, Date dueDate, TaskStatus status) {
-		this.title = title;
-        this.description = description;
-        this.dueDate = dueDate;
-        this.status = status;
-	}
-	
-	
 }

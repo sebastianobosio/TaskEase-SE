@@ -8,21 +8,30 @@ import java.awt.*;
 
 public class TaskView extends JPanel {
     private JLabel taskTitleLabel;
-    private JLabel taskDescriptionLabel;
+    //private JLabel taskDescriptionLabel;
+    private JLabel taskDueDateLabel;
     private JLabel taskStatusLabel;
-
+    private Task task;
+    
     public TaskView(Task task) {
+    	this.task = task;
         // Initialize components
         taskTitleLabel = new JLabel(task.getTitle());
-        taskDescriptionLabel = new JLabel(task.getDescription());
+        //taskDescriptionLabel = new JLabel(task.getDescription());
         taskStatusLabel = new JLabel("Status: " + task.getStatus());
+        taskDueDateLabel = new JLabel("Due date: " + task.getDueDate().toString());
 
         // Set up layout
-        setLayout(new BorderLayout());
-        add(taskTitleLabel, BorderLayout.NORTH);
-        add(taskDescriptionLabel, BorderLayout.CENTER);
-        add(taskStatusLabel, BorderLayout.SOUTH);
+        setLayout(new GridLayout(3,1));
+        add(taskTitleLabel);
+        //add(taskDescriptionLabel, BorderLayout.CENTER);
+        add(taskStatusLabel);
+        add(taskDueDateLabel);
         
         setPreferredSize(new Dimension(300, 100));
+    }
+    
+    public Task getTask() {
+        return task;
     }
 }
