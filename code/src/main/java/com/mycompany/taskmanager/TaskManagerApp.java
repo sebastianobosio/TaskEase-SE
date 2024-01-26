@@ -42,7 +42,7 @@ public class TaskManagerApp {
         mainView.addEventView(eventView1);
 
         // Create the main controller and pass the main view
-        // MainController mainController = new MainController(mainView);
+        MainController mainController = new MainController(mainView);
 
         // Set up the main frame
         JFrame frame = new JFrame("Task Manager");
