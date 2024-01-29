@@ -28,7 +28,11 @@ public class EventView extends JPanel {
         setPreferredSize(new Dimension(300, 100));
     }
     
+    public JLabel getEventTitle() {
+        return eventTitleLabel;
+    }
+    
     public Event getEvent() {
-        return event;
+    	return event;
     }
 }

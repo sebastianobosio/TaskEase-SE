@@ -44,15 +44,15 @@ public class MainView extends JPanel {
 
     public void addTaskView(TaskView taskView) {
         taskViews.add(taskView);
-        //TaskController taskController = new TaskController(taskView);
-        //taskControllers.add(taskController);
+        TaskController taskController = new TaskController(taskView);
+        taskControllers.add(taskController);
         updateContentPanel();
     }
 
     public void addEventView(EventView eventView) {
         eventViews.add(eventView);
-        //EventController eventController = new EventController(eventView);
-        //eventControllers.add(eventController);
+        EventController eventController = new EventController(eventView);
+        eventControllers.add(eventController);
         updateContentPanel();
     }
     

@@ -31,7 +31,11 @@ public class TaskView extends JPanel {
         setPreferredSize(new Dimension(300, 100));
     }
     
+    public JLabel getTaskTitle() {
+        return taskTitleLabel;
+    }
+    
     public Task getTask() {
-        return task;
+    	return task;
     }
 }
