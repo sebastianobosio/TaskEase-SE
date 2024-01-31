@@ -13,6 +13,7 @@ public class MainView extends JPanel {
     private List<EventView> eventViews;
     private List<TaskController> taskControllers;
     private List<EventController> eventControllers;
+    
     private JButton createTaskButton;
     private JButton createEventButton;
     private JPanel contentPanel;
@@ -23,23 +24,25 @@ public class MainView extends JPanel {
         eventViews = new ArrayList<>();
         taskControllers = new ArrayList<>();
         eventControllers = new ArrayList<>();
+        
+        contentPanel = new JPanel(); // Panel to hold task and event views        
+        
+        //create content panel for task and events
+        contentPanel.setLayout(new GridBagLayout());
+        JScrollPane scrollPane = new JScrollPane(contentPanel);  
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+             
+        //create panel for buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         createTaskButton = new JButton("Create Task");
         createEventButton = new JButton("Create Event");
-        contentPanel = new JPanel(); // Panel to hold task and event views
+        buttonPanel.add(createTaskButton);
+        buttonPanel.add(createEventButton);
         
         // Set up layout
         setLayout(new BorderLayout());
-        
-        //create content panel for task and events
-        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        add(scrollPane, BorderLayout.CENTER);
-        
-        //create panel for buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(createTaskButton);
-        buttonPanel.add(createEventButton);
         add(buttonPanel, BorderLayout.SOUTH);
+        add(scrollPane);
     }
 
     public void addTaskView(TaskView taskView) {
@@ -59,11 +62,19 @@ public class MainView extends JPanel {
     private void updateContentPanel() {
         // Clear the existing content panel
         contentPanel.removeAll();
-
+        
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.NORTH;
+        
         // Add each TaskView to the content panel
         for (TaskView taskView : taskViews) {
-            contentPanel.add(taskView);
-            contentPanel.add(Box.createVerticalStrut(10)); // vertical space
+        	contentPanel.add(taskView, constraints);
+            constraints.gridy++; // Move to the next row
+            contentPanel.add(Box.createVerticalStrut(10), constraints); // Add vertical space
+            constraints.gridy++; // Move to the next row
         }
 
         // Add a separator (you can customize this as needed)
@@ -71,15 +82,18 @@ public class MainView extends JPanel {
 
         // Add each EventView to the content panel
         for (EventView eventView : eventViews) {
-            contentPanel.add(eventView);
-            contentPanel.add(Box.createVerticalStrut(10));
+        	constraints.gridy++; // Move to the next row
+            contentPanel.add(eventView, constraints);
+            constraints.gridy++; // Move to the next row
+            contentPanel.add(Box.createVerticalStrut(10), constraints); // Add vertical space
         }
 
         // Revalidate and repaint to update the UI
         revalidate();
         repaint();
     }
-
+    
+    // used by MainController
     public JButton getCreateTaskButton() {
         return createTaskButton;
     }

@@ -45,11 +45,13 @@ public class TaskManagerApp {
         MainController mainController = new MainController(mainView);
 
         // Set up the main frame
-        JFrame frame = new JFrame("Task Manager");
+        JFrame frame = new JFrame("TaskEase");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().add(mainView);
-        frame.pack();
-        frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.add(mainView);
+        //frame.getContentPane().add(mainView);
+        //frame.pack();
+        //frame.setLocationRelativeTo(null); // Center the frame on the screen
+        frame.setSize(600,600);
         frame.setVisible(true);
 	}
 
