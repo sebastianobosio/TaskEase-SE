@@ -6,9 +6,11 @@ import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.view.TaskView;
 import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.taskmanager.controller.MainController;
+import com.mycompany.database.SQLiteDB;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,7 +45,16 @@ public class TaskManagerApp {
 
         // Create the main controller and pass the main view
         MainController mainController = new MainController(mainView);
-
+        
+        // Initialize the DB
+        try {
+        	SQLiteDB.getConnection(); // Initialize database connection
+        	System.out.println("Database initialized successfully.");
+        } catch (SQLException e) {
+        	e.printStackTrace();
+        	System.exit(1); // Exit application if database initialization fails
+        }
+        
         // Set up the main frame
         JFrame frame = new JFrame("Task Manager");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

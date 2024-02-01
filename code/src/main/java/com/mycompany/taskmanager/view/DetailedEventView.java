@@ -6,6 +6,7 @@ import java.awt.*;
 import com.mycompany.taskmanager.model.Event;
 
 public class DetailedEventView extends JFrame {
+	
 	public DetailedEventView(Event event) {
         // Set up the frame
         setTitle("Detailed View");
