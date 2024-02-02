@@ -6,25 +6,81 @@ import com.mycompany.taskmanager.model.Task;
 
 public class DetailedTaskView extends JFrame {
 	
-	public DetailedTaskView(Task task) {
-        // Set up the frame
+	private Task task; // Store the task data
+
+    private JTextField titleField;
+    private JTextArea descriptionArea;
+    private JTextField dueDateField;
+    private JTextField dueTimeField;
+    private JComboBox<String> statusComboBox;
+    private JButton saveButton;
+    private JButton deleteButton;
+    
+    // Constructor for creation of new tasks
+    public DetailedTaskView() {
+        initializeFrame();
+        initializeComponents();
+    }
+    
+    // Constructor for existing task, used for editing
+    public DetailedTaskView(Task task) {
+        this.task = task;
+        initializeFrame();
+        initializeComponents();
+        populateFields();
+    }
+    
+    private void initializeFrame() {
         setTitle("Detailed View");
-        setSize(300, 200);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Create and add components to display detailed task information
-        JLabel titleLabel = new JLabel("Title: " + task.getTitle());
-        JLabel descriptionLabel = new JLabel("Description: " + task.getDescription());
-        JLabel dueDateLabel = new JLabel("Date: " + task.getDueDate().toString());
-        JLabel statusLabel = new JLabel("Status: " + task.getStatus());
-
-        JPanel panel = new JPanel(new GridLayout(4, 1));
-        panel.add(titleLabel);
-        panel.add(descriptionLabel);
-        panel.add(dueDateLabel);
-        panel.add(statusLabel);
-
+    }
+    
+    private void initializeComponents() {
+        titleField = new JTextField();
+        descriptionArea = new JTextArea("", 5, 20);
+        dueDateField = new JTextField();
+        dueTimeField = new JTextField();
+        statusComboBox = new JComboBox<>(new String[]{"Not Started", "In Progress", "Completed"});
+        saveButton = new JButton("Save");
+        deleteButton = new JButton("Delete");
+        
+        // Set up the layout
+        JPanel panel = new JPanel(new GridLayout(6, 2));
+        panel.add(new JLabel("Title:"));
+        panel.add(titleField);
+        panel.add(new JLabel("Description:"));
+        panel.add(new JScrollPane(descriptionArea));
+        panel.add(new JLabel("Due Date:"));
+        panel.add(dueDateField);
+        panel.add(new JLabel("Due Time:"));
+        panel.add(dueTimeField);
+        panel.add(new JLabel("Status:"));
+        panel.add(statusComboBox);
+        panel.add(saveButton);
+        panel.add(deleteButton);
+        
         add(panel);
+    }
+    
+    private void populateFields() {
+        titleField.setText(task.getTitle());
+        descriptionArea.setText(task.getDescription());
+        dueDateField.setText(task.getDueDate().toString());
+        dueTimeField.setText(task.getDueTime().toString());
+        statusComboBox.setSelectedItem(task.getStatus());
+    }
+	
+    public JButton getSaveButton() {
+    	return saveButton;
+    }
+    
+    public JButton getDeleteButton() {
+    	return deleteButton;
+    }
+    
+	public Task getTask() {
+    	return task;
     }
 }
