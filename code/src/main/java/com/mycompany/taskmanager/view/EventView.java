@@ -1,31 +1,32 @@
 package com.mycompany.taskmanager.view;
 
 import com.mycompany.taskmanager.model.Event;
-import com.mycompany.taskmanager.model.Task;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class EventView extends JPanel {
     private JLabel eventTitleLabel;
-    private JLabel eventDateLabel;
-    private JLabel eventTimeLabel;
+    private JLabel eventStartDateLabel;
+    private JLabel eventEndDateLabel;
     private Event event;
     
     public EventView(Event event) {
     	// Initialize components
     	this.event = event;
         eventTitleLabel = new JLabel(event.getTitle());
-        eventDateLabel = new JLabel("Date: " + event.getStartDate() + " to " + event.getEndDate());
-        eventTimeLabel = new JLabel("Time: " + event.getStartTime() + " to " + event.getEndTime());
+        eventStartDateLabel = new JLabel("Inizio: " + event.getStartDate() + " alle " + event.getStartTime());
+        eventEndDateLabel = new JLabel("Fine: " + event.getEndDate() + " alle " + event.getEndTime());
 
         // Set up layout
-        setLayout(new GridLayout(3,1));
-        add(eventTitleLabel);
-        add(eventDateLabel);
-        add(eventTimeLabel);
-        
-        setPreferredSize(new Dimension(300, 100));
+        setLayout(new BorderLayout());
+        JPanel infoPanel = new JPanel(new GridLayout(3, 1));
+        infoPanel.add(eventTitleLabel);
+        infoPanel.add(eventStartDateLabel);
+        infoPanel.add(eventEndDateLabel);
+        infoPanel.setPreferredSize(new Dimension(100, 100));
+        add(infoPanel, BorderLayout.CENTER);
+        setPreferredSize(new Dimension(100, 100));
     }
     
     public JLabel getEventTitle() {

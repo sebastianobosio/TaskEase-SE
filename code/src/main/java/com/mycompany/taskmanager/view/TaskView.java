@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 
 public class TaskView extends JPanel {
     private JLabel taskTitleLabel;
-    //private JLabel taskDescriptionLabel;
     private JLabel taskDueDateLabel;
+    private JLabel taskDueTimeLabel;
     private JLabel taskStatusLabel;
     private Task task;
     
@@ -18,8 +18,8 @@ public class TaskView extends JPanel {
         // Initialize components
         taskTitleLabel = new JLabel(task.getTitle());
         taskStatusLabel = new JLabel("Status: " + task.getStatus());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        taskDueDateLabel = new JLabel("Due date: " + dateFormat.format(task.getDueDate()));
+        taskDueDateLabel = new JLabel("Due date: " + task.getDueDate());
+        taskDueTimeLabel = new JLabel("Due time: " + task.getDueTime());
         
         // Set up layout   
         setLayout(new BorderLayout());
@@ -27,9 +27,10 @@ public class TaskView extends JPanel {
         infoPanel.add(taskTitleLabel);
         infoPanel.add(taskStatusLabel);
         infoPanel.add(taskDueDateLabel);
+        infoPanel.add(taskDueTimeLabel);
         infoPanel.setPreferredSize(new Dimension(100, 100));
         add(infoPanel, BorderLayout.CENTER);
-        setPreferredSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(400, 100));
     }
     
     public JLabel getTaskTitle() {

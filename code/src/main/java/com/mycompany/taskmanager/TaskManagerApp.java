@@ -9,7 +9,6 @@ import com.mycompany.taskmanager.controller.MainController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -19,15 +18,16 @@ public class TaskManagerApp {
 		// TODO Auto-generated method stub
 		
 		// creating mock up cases
-		Task task1 = new Task("Task 1", "Description for Task 1", new Date(), Task.TaskStatus.NOTSTARTED);
-        Task task2 = new Task("Task 2", "Description for Task 2", new Date(), Task.TaskStatus.ONGOING);
+		
         
         LocalDate startDate = LocalDate.of(2023, 4, 13);  // April 13, 2023
         LocalTime startTime = LocalTime.of(17, 5);        // 17:05
 
         LocalDate endDate = LocalDate.of(2023, 4, 14);    // April 14, 2023
         LocalTime endTime = LocalTime.of(18, 30);         // 18:30
-
+        
+        Task task1 = new Task("Task 1", "Description for Task 1", startDate, startTime, Task.TaskStatus.NOTSTARTED);
+        Task task2 = new Task("Task 2", "Description for Task 2", startDate, startTime, Task.TaskStatus.ONGOING);
         Event event = new Event("Conference", "Annual conference", startDate, startTime, endDate, endTime, "Convention Center");
         
         // Create GUI components

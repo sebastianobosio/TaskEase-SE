@@ -1,6 +1,7 @@
 package com.mycompany.taskmanager.model;
 
-import java.util.Date;
+import java.time.LocalTime;
+import java.time.LocalDate;
 
 public class Task {
 	public enum TaskStatus {
@@ -11,14 +12,16 @@ public class Task {
 	
 	private String title;
 	private String description;
-	private Date dueDate;
+	private LocalDate dueDate;
+	private LocalTime dueTime;
 	private TaskStatus status;
 	
 	// Constructor
-	public Task(String title, String description, Date dueDate, TaskStatus status) {
+	public Task(String title, String description, LocalDate dueDate, LocalTime dueTime, TaskStatus status) {
 		this.title = title;
         this.description = description;
         this.dueDate = dueDate;
+        this.dueTime = dueTime;
         this.status = status;
 	}
 	
@@ -38,12 +41,12 @@ public class Task {
 		this.description = description;
 	}
 
-	public Date getDueDate() {
+	public LocalDate getDueDate() {
 		return dueDate;
 	}
-
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+	
+	public LocalTime getDueTime() {
+		return dueTime;
 	}
 
 	public TaskStatus getStatus() {

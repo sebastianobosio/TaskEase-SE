@@ -3,8 +3,6 @@ package com.mycompany.taskmanager.view;
 import javax.swing.*;
 import java.awt.*;
 import com.mycompany.taskmanager.model.Task;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class DetailedTaskView extends JFrame {
 	
@@ -13,54 +11,76 @@ public class DetailedTaskView extends JFrame {
     private JTextField titleField;
     private JTextArea descriptionArea;
     private JTextField dueDateField;
+    private JTextField dueTimeField;
     private JComboBox<String> statusComboBox;
+    private JButton saveButton;
+    private JButton deleteButton;
     
+    // Constructor for creation of new tasks
+    public DetailedTaskView() {
+        initializeFrame();
+        initializeComponents();
+    }
     
-	public DetailedTaskView(Task task) {
-		this.task = task;
-        // Set up the frame
+    // Constructor for existing task, used for editing
+    public DetailedTaskView(Task task) {
+        this.task = task;
+        initializeFrame();
+        initializeComponents();
+        populateFields();
+    }
+    
+    private void initializeFrame() {
         setTitle("Detailed View");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Create components for task details
-        titleField = new JTextField(task.getTitle());
-        descriptionArea = new JTextArea(task.getDescription(), 5, 20);
-        dueDateField = new JTextField(task.getDueDate().toString());
+    }
+    
+    private void initializeComponents() {
+        titleField = new JTextField();
+        descriptionArea = new JTextArea("", 5, 20);
+        dueDateField = new JTextField();
+        dueTimeField = new JTextField();
         statusComboBox = new JComboBox<>(new String[]{"Not Started", "In Progress", "Completed"});
-        statusComboBox.setSelectedItem(task.getStatus());
+        saveButton = new JButton("Save");
+        deleteButton = new JButton("Delete");
         
-        // Create a save button
-        JButton saveButton = new JButton("Save");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Update task details based on user input
-                task.setTitle(titleField.getText());
-                task.setDescription(descriptionArea.getText());
-                // Parse and set due date from dueDateField
-                // Set task status from statusComboBox.getSelectedItem()
-                // date field should be parsed as Date(string). 
-                // the save should delete the taskView and replace with a new taskView built with the new
-                // field data and add it to the database. This part should be moved to a controller
-                // Close the frame after saving changes
-                dispose();
-            }
-        });
-
-        // Create a panel to organize components
-        JPanel panel = new JPanel(new GridLayout(5, 2));
+        // Set up the layout
+        JPanel panel = new JPanel(new GridLayout(6, 2));
         panel.add(new JLabel("Title:"));
         panel.add(titleField);
         panel.add(new JLabel("Description:"));
         panel.add(new JScrollPane(descriptionArea));
         panel.add(new JLabel("Due Date:"));
         panel.add(dueDateField);
+        panel.add(new JLabel("Due Time:"));
+        panel.add(dueTimeField);
         panel.add(new JLabel("Status:"));
         panel.add(statusComboBox);
         panel.add(saveButton);
-
+        panel.add(deleteButton);
+        
         add(panel);
+    }
+    
+    private void populateFields() {
+        titleField.setText(task.getTitle());
+        descriptionArea.setText(task.getDescription());
+        dueDateField.setText(task.getDueDate().toString());
+        dueTimeField.setText(task.getDueTime().toString());
+        statusComboBox.setSelectedItem(task.getStatus());
+    }
+	
+    public JButton getSaveButton() {
+    	return saveButton;
+    }
+    
+    public JButton getDeleteButton() {
+    	return deleteButton;
+    }
+    
+	public Task getTask() {
+    	return task;
     }
 }
