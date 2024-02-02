@@ -2,32 +2,95 @@ package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
 import java.awt.*;
-
 import com.mycompany.taskmanager.model.Event;
 
 public class DetailedEventView extends JFrame {
 	
-	public DetailedEventView(Event event) {
-        // Set up the frame
+	private Event event; // Store the task data
+	
+	private JTextField titleField;
+    private JTextArea descriptionArea;
+    private JTextField startDateField;
+    private JTextField startTimeField;
+    private JTextField endDateField;
+    private JTextField endTimeField;
+    private JTextArea locationArea;
+    private JButton saveButton;
+    private JButton deleteButton;
+    
+    // Constructor for creation of new events
+    public DetailedEventView() {
+        initializeFrame();
+        initializeComponents();
+    }
+    
+    // Constructor for existing task, used for editing
+    public DetailedEventView(Event event) {
+        this.event = event;
+        initializeFrame();
+        initializeComponents();
+        populateFields();
+    }
+	
+	private void initializeFrame() {
         setTitle("Detailed View");
-        setSize(300, 200);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Create and add components to display detailed task information
-        JLabel eventTitleLabel = new JLabel(event.getTitle());
-        JLabel eventDescriptionLabel = new JLabel(event.getDescription());
-        JLabel eventDateLabel = new JLabel("Date: " + event.getStartDate() + " to " + event.getEndDate());
-        JLabel eventTimeLabel = new JLabel("Time: " + event.getStartTime() + " to " + event.getEndTime());
-        JLabel eventLocationLabel = new JLabel("Location: " + event.getLocation());
-
-        JPanel panel = new JPanel(new GridLayout(4, 1));
-        panel.add(eventTitleLabel);
-        panel.add(eventDescriptionLabel);
-        panel.add(eventDateLabel);
-        panel.add(eventTimeLabel);
-        panel.add(eventLocationLabel);
-
+    }
+	
+	private void initializeComponents() {
+        titleField = new JTextField();
+        descriptionArea = new JTextArea("", 5, 20);
+        startDateField = new JTextField();
+        startTimeField = new JTextField();
+        endDateField = new JTextField();
+        endTimeField = new JTextField();
+        locationArea = new JTextArea("", 5, 20);
+        saveButton = new JButton("Save");
+        deleteButton = new JButton("Delete");
+        
+        // Set up the layout
+        JPanel panel = new JPanel(new GridLayout(9, 2));
+        panel.add(new JLabel("Title:"));
+        panel.add(titleField);
+        panel.add(new JLabel("Description:"));
+        panel.add(new JScrollPane(descriptionArea));
+        panel.add(new JLabel("Start Date:"));
+        panel.add(startDateField);
+        panel.add(new JLabel("Start Time:"));
+        panel.add(startTimeField);
+        panel.add(new JLabel("End Date:"));
+        panel.add(endDateField);
+        panel.add(new JLabel("End Time:"));
+        panel.add(endTimeField);
+        panel.add(new JLabel("Location"));
+        panel.add(locationArea);
+        panel.add(saveButton);
+        panel.add(deleteButton);
+        
         add(panel);
+    }
+	
+	private void populateFields() {
+        titleField.setText(event.getTitle());
+        descriptionArea.setText(event.getDescription());
+        startDateField.setText(event.getStartDate().toString());
+        startTimeField.setText(event.getStartTime().toString());
+        endDateField.setText(event.getEndDate().toString());
+        endTimeField.setText(event.getEndTime().toString());
+        locationArea.setText(event.getLocation());
+    }
+	
+	public JButton getSaveButton() {
+    	return saveButton;
+    }
+    
+    public JButton getDeleteButton() {
+    	return deleteButton;
+    }
+    
+	public Event getTask() {
+    	return event;
     }
 }
