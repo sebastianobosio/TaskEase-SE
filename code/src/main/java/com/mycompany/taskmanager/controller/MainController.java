@@ -27,6 +27,7 @@ public class MainController {
             // You can handle the creation of a new task here
             // For now, let's add a mockup task to the view
         	//DetailedTaskView detailedTaskView = new DetailedTaskView();
+        	//TaskController taskController = new TaskController(detailedTaskView);
             TaskView taskView = new TaskView(new Task("New Task", "Description for the new task", null, null));
             mainView.addTaskView(taskView);
         }
