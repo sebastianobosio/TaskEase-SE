@@ -28,8 +28,8 @@ public class MainController {
             // For now, let's add a mockup task to the view
         	//DetailedTaskView detailedTaskView = new DetailedTaskView();
         	//TaskController taskController = new TaskController(detailedTaskView);
-            TaskView taskView = new TaskView(new Task("New Task", "Description for the new task", null, null));
-            mainView.addTaskView(taskView);
+            //TaskView taskView = new TaskView(new Task("New Task", "Description for the new task", null, null));
+            //SmainView.addTaskView(taskView);
         }
     }
 

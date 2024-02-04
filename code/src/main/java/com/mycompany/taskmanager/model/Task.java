@@ -49,9 +49,19 @@ public class Task {
 		return dueTime;
 	}
 
-	public TaskStatus getStatus() {
-		return status;
-	}
+	public String getStatus() {
+	    String statusString = null;
+	    
+	    if (status == TaskStatus.COMPLETED) {
+	        statusString = "Completed";
+	    } else if (status == TaskStatus.NOTSTARTED) {
+	        statusString = "Not Started";
+	    } else if (status == TaskStatus.ONGOING) {
+	        statusString = "In Progress";
+	    }
+	    
+	    return statusString;
+	}  
 
 	public void setStatus(TaskStatus status) {
 		this.status = status;
