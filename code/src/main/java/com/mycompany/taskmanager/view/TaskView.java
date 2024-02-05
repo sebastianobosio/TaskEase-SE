@@ -18,8 +18,8 @@ public class TaskView extends JPanel {
         // Initialize components
         taskTitleLabel = new JLabel(task.getTitle());
         taskStatusLabel = new JLabel("Status: " + task.getStatus());
-        taskDueDateLabel = new JLabel("Due date: " + task.getDueDate());
-        taskDueTimeLabel = new JLabel("Due time: " + task.getDueTime());
+        taskDueDateLabel = new JLabel("Due date: " + task.getFormattedDueDate());
+        taskDueTimeLabel = new JLabel("Due time: " + task.getFormattedDueTime());
         
         // Set up layout   
         setLayout(new BorderLayout());

@@ -3,10 +3,13 @@ package com.mycompany.taskmanager.view;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.mycompany.taskmanager.controller.EventController;
 import com.mycompany.taskmanager.controller.TaskController;
+import com.mycompany.taskmanager.model.Task;
+import com.mycompany.taskmanager.model.Event;
 
 public class MainView extends JPanel {
     private List<TaskView> taskViews;
@@ -43,23 +46,46 @@ public class MainView extends JPanel {
         setLayout(new BorderLayout());
         add(buttonPanel, BorderLayout.SOUTH);
         add(scrollPane);
-    }
-
-    public void addTaskView(TaskView taskView) {
-        taskViews.add(taskView);
-        TaskController taskController = new TaskController(taskView);
-        taskControllers.add(taskController);
-        updateContentPanel();
-    }
-
-    public void addEventView(EventView eventView) {
-        eventViews.add(eventView);
-        EventController eventController = new EventController(eventView);
-        eventControllers.add(eventController);
-        updateContentPanel();
+        
     }
     
-    private void updateContentPanel() {
+    public void createTaskViews(List<Task> taskList) {
+    	for (Task task: taskList) {
+    		addTaskView(task);
+    	}
+    }
+    
+    public void addTaskView(Task task) {
+    	TaskView taskView = new TaskView(task);
+		TaskController taskController = new TaskController(taskView, this);
+		taskControllers.add(taskController);
+		taskViews.add(taskView);
+    }
+    
+    public void deleteTaskView(Task taskToDelete) {
+    	// Remove taskViews that are build on the specific task model
+    	Iterator<TaskView> iterator = taskViews.iterator();
+        while (iterator.hasNext()) {
+            Task task = iterator.next().getTask();
+            if (task == taskToDelete) {
+                iterator.remove(); // Remove the current task
+                System.out.println("delete task view: " + taskViews);
+            }
+    	
+        }
+    }
+    
+    public void createEventView(List<Event> eventList) {
+    	for (Event event: eventList) {
+    		EventView eventView = new EventView(event);
+    		EventController eventController = new EventController(eventView);
+    		eventControllers.add(eventController);
+    		eventViews.add(eventView);
+    	}
+    }
+    
+    public void updateContentPanel() {
+    	System.out.println(taskViews);
         // Clear the existing content panel
         contentPanel.removeAll();
         
