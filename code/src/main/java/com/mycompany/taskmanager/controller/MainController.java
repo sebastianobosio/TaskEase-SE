@@ -2,7 +2,9 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.view.TaskView;
+import com.mycompany.taskmanager.view.DetailedTaskView;
 import com.mycompany.taskmanager.view.EventView;
+import com.mycompany.database.SQLiteTaskDAO;
 import com.mycompany.taskmanager.model.Event;
 import com.mycompany.taskmanager.model.Task;
 
@@ -11,7 +13,8 @@ import java.awt.event.ActionListener;
 
 public class MainController {
     private MainView mainView;
-
+    SQLiteTaskDAO sqliteTaskDAO = new SQLiteTaskDAO();
+    
     public MainController(MainView mainView) {
         this.mainView = mainView;
 
@@ -19,17 +22,18 @@ public class MainController {
         mainView.getCreateTaskButton().addActionListener(new CreateTaskButtonListener());
         mainView.getCreateEventButton().addActionListener(new CreateEventButtonListener());
     }
-
+    
+    public void updateMainView() {
+    	mainView.createTaskViews(sqliteTaskDAO.getAllTasks());
+    	mainView.updateContentPanel();
+    }
+    
     // Action listener for the "Create Task" button
     private class CreateTaskButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // You can handle the creation of a new task here
-            // For now, let's add a mockup task to the view
-        	//DetailedTaskView detailedTaskView = new DetailedTaskView();
-        	//TaskController taskController = new TaskController(detailedTaskView);
-            //TaskView taskView = new TaskView(new Task("New Task", "Description for the new task", null, null));
-            //SmainView.addTaskView(taskView);
+        	DetailedTaskView detailedTaskView = new DetailedTaskView();
+        	TaskController taskController = new TaskController(detailedTaskView, mainView);
         }
     }
 
@@ -39,8 +43,8 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             // You can handle the creation of a new event here
             // For now, let's add a mockup event to the view
-            EventView eventView = new EventView(new Event("New Event", "Description for the new event", null,null,null, null, "New Location"));
-            mainView.addEventView(eventView);
+            //EventView eventView = new EventView(new Event("New Event", "Description for the new event", null,null,null, null, "New Location"));
+            //mainView.addEventView(eventView);
         }
     }
 }

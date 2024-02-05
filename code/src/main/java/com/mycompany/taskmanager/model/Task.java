@@ -1,6 +1,7 @@
 package com.mycompany.taskmanager.model;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 
 public class Task {
@@ -10,11 +11,15 @@ public class Task {
 		NOTSTARTED,	
 	}
 	
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    
 	private String title;
 	private String description;
 	private LocalDate dueDate;
 	private LocalTime dueTime;
 	private TaskStatus status;
+	private int id;
 	
 	// Constructor
 	public Task(String title, String description, LocalDate dueDate, LocalTime dueTime, TaskStatus status) {
@@ -23,6 +28,20 @@ public class Task {
         this.dueDate = dueDate;
         this.dueTime = dueTime;
         this.status = status;
+	}
+	
+	// Constructor for tasks retrieved from the database
+	public Task(int id, String title, String description, LocalDate dueDate, LocalTime dueTime, TaskStatus status) {
+		this.id = id;
+		this.title = title;
+        this.description = description;
+        this.dueDate = dueDate;
+        this.dueTime = dueTime;
+        this.status = status;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String getTitle() {
@@ -45,9 +64,25 @@ public class Task {
 		return dueDate;
 	}
 	
+	public void setDueDate(LocalDate date) {
+		this.dueDate = date;
+	}
+	
+	public String getFormattedDueDate() {
+        return dueDate.format(dateFormatter);
+    }
+	
 	public LocalTime getDueTime() {
 		return dueTime;
 	}
+	
+	public void setDueTime(LocalTime time) {
+		this.dueTime = time;
+	}
+
+    public String getFormattedDueTime() {
+        return dueTime.format(timeFormatter);
+    }
 
 	public String getStatus() {
 	    String statusString = null;

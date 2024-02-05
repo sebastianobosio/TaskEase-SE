@@ -2,12 +2,18 @@ package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import com.mycompany.taskmanager.model.Task;
 
 public class DetailedTaskView extends JFrame {
 	
 	private Task task; // Store the task data
-
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    
     private JTextField titleField;
     private JTextArea descriptionArea;
     private JTextField dueDateField;
@@ -67,11 +73,36 @@ public class DetailedTaskView extends JFrame {
     private void populateFields() {
         titleField.setText(task.getTitle());
         descriptionArea.setText(task.getDescription());
-        dueDateField.setText(task.getDueDate().toString());
-        dueTimeField.setText(task.getDueTime().toString());
+        dueDateField.setText(task.getFormattedDueDate());
+        dueTimeField.setText(task.getFormattedDueTime());
         statusComboBox.setSelectedItem(task.getStatus());
     }
 	
+ // Method to read the value of titleField
+    public String getTitleFieldValue() {
+        return titleField.getText();
+    }
+
+    // Method to read the value of descriptionArea
+    public String getDescriptionAreaValue() {
+        return descriptionArea.getText();
+    }
+
+    // Method to read the value of dueDateField as LocalDate
+    public LocalDate getDueDateFieldValue() {
+        return LocalDate.parse(dueDateField.getText(), dateFormatter);
+    }
+
+    // Method to read the value of dueTimeField as LocalTime
+    public LocalTime getDueTimeFieldValue() {
+        return LocalTime.parse(dueTimeField.getText(), timeFormatter);
+    }
+
+    // Method to read the selected value from statusComboBox
+    public String getStatusComboBoxValue() {
+        return (String) statusComboBox.getSelectedItem();
+    }
+    
     public JButton getSaveButton() {
     	return saveButton;
     }
@@ -79,6 +110,7 @@ public class DetailedTaskView extends JFrame {
     public JButton getDeleteButton() {
     	return deleteButton;
     }
+    
     
 	public Task getTask() {
     	return task;
