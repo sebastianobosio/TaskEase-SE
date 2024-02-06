@@ -2,12 +2,18 @@ package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 import com.mycompany.taskmanager.model.Event;
 
 public class DetailedEventView extends JFrame {
 	
 	private Event event; // Store the task data
-	
+	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    
 	private JTextField titleField;
     private JTextArea descriptionArea;
     private JTextField startDateField;
@@ -80,6 +86,36 @@ public class DetailedEventView extends JFrame {
         endDateField.setText(event.getEndDate().toString());
         endTimeField.setText(event.getEndTime().toString());
         locationArea.setText(event.getLocation());
+    }
+	
+	// Method to read the value of titleField
+    public String getTitleFieldValue() {
+        return titleField.getText();
+    }
+
+    // Method to read the value of descriptionArea
+    public String getDescriptionAreaValue() {
+        return descriptionArea.getText();
+    }
+
+    // Method to read the value of startDateField as LocalDate
+    public LocalDate getStartDateFieldValue() {
+        return LocalDate.parse(startDateField.getText(), dateFormatter);
+    }
+
+    // Method to read the value of startTimeField as LocalTime
+    public LocalTime getStartTimeFieldValue() {
+        return LocalTime.parse(startTimeField.getText(), timeFormatter);
+    }
+    
+    // Method to read the value of endDateField as LocalDate
+    public LocalDate getEndDateFieldValue() {
+        return LocalDate.parse(endDateField.getText(), dateFormatter);
+    }
+    
+    // Method to read the value of endTimeField as LocalTime
+    public LocalTime getEndTimeFieldValue() {
+        return LocalTime.parse(endTimeField.getText(), timeFormatter);
     }
 	
 	public JButton getSaveButton() {

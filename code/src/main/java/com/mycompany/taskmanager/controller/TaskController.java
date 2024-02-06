@@ -48,7 +48,7 @@ public class TaskController {
         if (task != null) {
             // Open a new window or dialog to display detailed information about the task
             DetailedTaskView detailedTaskView = new DetailedTaskView(task);
-            // add listener to the save button
+            // add listener to the save and delete button
             detailedTaskView.getSaveButton().addActionListener(new SaveButtonListener(detailedTaskView, mainView));
             detailedTaskView.getDeleteButton().addActionListener(new DeleteButtonListener(detailedTaskView, mainView));
             detailedTaskView.setVisible(true);
