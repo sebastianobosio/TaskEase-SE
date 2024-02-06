@@ -78,7 +78,7 @@ public class DetailedTaskView extends JFrame {
         statusComboBox.setSelectedItem(task.getStatus());
     }
 	
- // Method to read the value of titleField
+    // Method to read the value of titleField
     public String getTitleFieldValue() {
         return titleField.getText();
     }

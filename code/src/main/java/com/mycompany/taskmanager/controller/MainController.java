@@ -2,8 +2,10 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.view.TaskView;
+import com.mycompany.taskmanager.view.DetailedEventView;
 import com.mycompany.taskmanager.view.DetailedTaskView;
 import com.mycompany.taskmanager.view.EventView;
+import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.database.SQLiteTaskDAO;
 import com.mycompany.taskmanager.model.Event;
 import com.mycompany.taskmanager.model.Task;
@@ -14,6 +16,7 @@ import java.awt.event.ActionListener;
 public class MainController {
     private MainView mainView;
     SQLiteTaskDAO sqliteTaskDAO = new SQLiteTaskDAO();
+    SQLiteEventDAO sqliteEventDAO = new SQLiteEventDAO();
     
     public MainController(MainView mainView) {
         this.mainView = mainView;
@@ -25,6 +28,7 @@ public class MainController {
     
     public void updateMainView() {
     	mainView.createTaskViews(sqliteTaskDAO.getAllTasks());
+    	mainView.createEventViews(sqliteEventDAO.getAllEvents());
     	mainView.updateContentPanel();
     }
     
@@ -41,10 +45,8 @@ public class MainController {
     private class CreateEventButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // You can handle the creation of a new event here
-            // For now, let's add a mockup event to the view
-            //EventView eventView = new EventView(new Event("New Event", "Description for the new event", null,null,null, null, "New Location"));
-            //mainView.addEventView(eventView);
+        	DetailedEventView detailedEventView = new DetailedEventView();
+        	EventController eventController = new EventController(detailedEventView, mainView);
         }
     }
 }

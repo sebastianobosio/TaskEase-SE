@@ -75,13 +75,30 @@ public class MainView extends JPanel {
         }
     }
     
-    public void createEventView(List<Event> eventList) {
+    public void createEventViews(List<Event> eventList) {
     	for (Event event: eventList) {
-    		EventView eventView = new EventView(event);
-    		EventController eventController = new EventController(eventView);
-    		eventControllers.add(eventController);
-    		eventViews.add(eventView);
+    		addEventView(event);
     	}
+    }
+    
+    public void addEventView(Event event) {
+    	EventView eventView = new EventView(event);
+		EventController eventController = new EventController(eventView, this);
+		eventControllers.add(eventController);
+		eventViews.add(eventView);
+    }
+    
+    public void deleteEventView(Event eventToDelete) {
+    	// Remove taskViews that are build on the specific task model
+    	Iterator<EventView> iterator = eventViews.iterator();
+        while (iterator.hasNext()) {
+        	Event event = iterator.next().getEvent();
+            if (event == eventToDelete) {
+                iterator.remove(); // Remove the current task
+                System.out.println("delete event view: " + eventViews);
+            }
+    	
+        }
     }
     
     public void updateContentPanel() {

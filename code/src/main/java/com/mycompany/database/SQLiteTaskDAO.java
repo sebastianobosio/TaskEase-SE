@@ -28,6 +28,7 @@ public class SQLiteTaskDAO implements TaskDAO{
             // Handle any database-related exceptions here
         }
     }
+	
 	@Override
 	public int saveTask(Task task) {
 		String sql = "INSERT INTO tasks (name, description, due_date, due_time, status) VALUES (?, ?, ?, ?, ?)";
@@ -115,6 +116,7 @@ public class SQLiteTaskDAO implements TaskDAO{
 	 }
 	 
 	 // return a task given an ID as input
+	 @Override
 	 public Task getTaskById(int taskId) {
 	        String sql = "SELECT * FROM tasks WHERE id = ?";
 	        Task task = null;
@@ -153,7 +155,7 @@ public class SQLiteTaskDAO implements TaskDAO{
 	 
 	 @Override
 	 public void deleteTask(int taskId) {
-	        String sql = "DELETE FROM tasks WHERE id = ?";
+		 	String sql = "DELETE FROM tasks WHERE id = ?";
 
 	        try (PreparedStatement statement = connection.prepareStatement(sql)) {
 	            statement.setInt(1, taskId);

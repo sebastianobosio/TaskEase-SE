@@ -25,7 +25,7 @@ public class SQLiteDB {
             
             // Create tables if they don't exist
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, due_date TEXT, due_time TEXT, status TEXT)");
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, location TEXT, start_date DATE, start_time TIME, end_date DATE, end_time TIME)");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS events (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, location TEXT, start_date TEXT, start_time TEXT, end_date TEXT, end_time TEXT)");
         }
     }
 

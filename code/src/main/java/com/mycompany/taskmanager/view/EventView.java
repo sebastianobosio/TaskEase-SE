@@ -15,8 +15,8 @@ public class EventView extends JPanel {
     	// Initialize components
     	this.event = event;
         eventTitleLabel = new JLabel(event.getTitle());
-        eventStartDateLabel = new JLabel("Inizio: " + event.getStartDate() + " alle " + event.getStartTime());
-        eventEndDateLabel = new JLabel("Fine: " + event.getEndDate() + " alle " + event.getEndTime());
+        eventStartDateLabel = new JLabel("Inizio: " + event.getFormattedStartDate() + " alle " + event.getFormattedStartTime());
+        eventEndDateLabel = new JLabel("Fine: " + event.getFormattedEndDate() + " alle " + event.getFormattedEndTime());
 
         // Set up layout
         setLayout(new BorderLayout());
@@ -26,7 +26,7 @@ public class EventView extends JPanel {
         infoPanel.add(eventEndDateLabel);
         infoPanel.setPreferredSize(new Dimension(100, 100));
         add(infoPanel, BorderLayout.CENTER);
-        setPreferredSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(400, 100));
     }
     
     public JLabel getEventTitle() {
