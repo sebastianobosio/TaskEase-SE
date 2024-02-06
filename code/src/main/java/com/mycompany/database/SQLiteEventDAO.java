@@ -31,32 +31,32 @@ private Connection connection;
 	public int saveEvent(Event event) {
 		String sql = "INSERT INTO events (name, description, location, start_date, start_time, end_date, end_time) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            // Set values for prepared statement parameters
-            statement.setString(1, event.getTitle());
-            statement.setString(2, event.getDescription());
-            statement.setString(3, event.getLocation());
-            statement.setString(4, event.getFormattedStartDate());
-            statement.setString(5, event.getFormattedStartTime());
-            statement.setString(6, event.getFormattedEndDate());
-            statement.setString(7, event.getFormattedEndTime());
-
-            // Execute the SQL INSERT query
-            statement.executeUpdate();
-            System.out.println("Event inserted successfully.");
-            
-            // Retrieve the generated ID
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1); // Return the generated ID
-            } else {
-                throw new SQLException("Failed to retrieve the auto-generated ID.");
-            }
-        } catch (SQLException e) {
-        	System.out.println("i'm here");
-            e.printStackTrace();
-            // Handle any database-related exceptions here
-            return -1; // Return a default value to indicate failure
-        }
+		    // Set values for prepared statement parameters
+		    statement.setString(1, event.getTitle());
+		    statement.setString(2, event.getDescription());
+		    statement.setString(3, event.getLocation());
+		    statement.setString(4, event.getFormattedStartDate());
+		    statement.setString(5, event.getFormattedStartTime());
+		    statement.setString(6, event.getFormattedEndDate());
+		    statement.setString(7, event.getFormattedEndTime());
+		
+		    // Execute the SQL INSERT query
+		    statement.executeUpdate();
+		    System.out.println("Event inserted successfully.");
+		    
+		    // Retrieve the generated ID
+		    ResultSet generatedKeys = statement.getGeneratedKeys();
+		    if (generatedKeys.next()) {
+		        return generatedKeys.getInt(1); // Return the generated ID
+		    } else {
+		        throw new SQLException("Failed to retrieve the auto-generated ID.");
+		    }
+		} catch (SQLException e) {
+			System.out.println("i'm here");
+		    e.printStackTrace();
+		    // Handle any database-related exceptions here
+		    return -1; // Return a default value to indicate failure
+		    }
 	}
 
 	@Override
@@ -159,6 +159,4 @@ private Connection connection;
             // Handle any database-related exceptions here
         }
 	}
-
-	
 }

@@ -11,7 +11,7 @@ public class SQLiteDB {
 	public static final String DB_URL = "jdbc:sqlite:" + DB_REL_FILE;
 	
     static {
-        try {
+    	try {
             createDatabase();
         } catch (SQLException e) {
             e.printStackTrace();

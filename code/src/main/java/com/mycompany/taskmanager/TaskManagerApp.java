@@ -12,7 +12,7 @@ public class TaskManagerApp {
 
 	public static void main(String[] args) {
 	
-        // Create GUI components
+		// Create GUI components
         MainView mainView = new MainView();
 
         // Create the main controller and pass the main view
