@@ -2,12 +2,9 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.taskmanager.view.MainView;
-import com.mycompany.database.SQLiteTaskDAO;
+import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.taskmanager.model.Event;
-import com.mycompany.taskmanager.model.Task;
-import com.mycompany.taskmanager.model.Task.TaskStatus;
 import com.mycompany.taskmanager.view.DetailedEventView;
-import com.mycompany.taskmanager.view.DetailedTaskView;
 
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -78,47 +75,41 @@ public class EventController {
         	// get field values
         	String title = detailedEventView.getTitleFieldValue();
     		String description = detailedEventView.getDescriptionAreaValue();
-    		String location = detailedEventView.ge;
+    		String location = detailedEventView.getLocationAreaValue();
     		System.out.println(description);
-    		String statusAsString = detailedTaskView.getStatusComboBoxValue();
-    		TaskStatus status = null;
-    		if (statusAsString == "Completed") {
-    			status = TaskStatus.COMPLETED;
-    	    } else if (statusAsString == "Not Started") {
-    	    	status = TaskStatus.NOTSTARTED;
-    	    } else if (statusAsString == "In Progress") {
-    	    	status = TaskStatus.ONGOING;
-    	    }
-    		System.out.println("i'm here");
-    		LocalDate dueDate = detailedTaskView.getDueDateFieldValue();
-    		LocalTime dueTime = detailedTaskView.getDueTimeFieldValue();
+    		LocalDate startDate = detailedEventView.getStartDateFieldValue();
+    		LocalTime startTime = detailedEventView.getStartTimeFieldValue();
+    		LocalDate endDate = detailedEventView.getEndDateFieldValue();
+    		LocalTime endTime = detailedEventView.getEndTimeFieldValue();
     		
-        	if (detailedTaskView.getTask() == null) {
+        	if (detailedEventView.getEvent() == null) {
         		operation = "create";
         		// i have to check the field values.
-        		Task newTask = new Task(title, description, dueDate, dueTime, status);
-        		// save task and update view panel
-        		int newTaskID = sqliteTaskDAO.saveTask(newTask);
-        		Task newTaskWithID = sqliteTaskDAO.getTaskById(newTaskID);
-        		// i have to add the task with the ID retrieved from the DB to make the update operation possible
-        		mainView.addTaskView(newTaskWithID);
+        		Event newEvent = new Event(title, description, location, startDate, startTime, endDate, endTime);
+        		// save event and update view panel
+        		int newEventID = sqliteEventDAO.saveEvent(newEvent);
+        		Event newEventWithID = sqliteEventDAO.getEventById(newEventID);
+        		// i have to add the event with the ID retrieved from the DB to make the update operation possible
+        		mainView.addEventView(newEventWithID);
         	}
         	
         	if (operation == "update") {
-        		Task task = detailedTaskView.getTask();
-        		mainView.deleteTaskView(task);
-        		task.setTitle(title);
-        		task.setDescription(description);
-        		task.setDueDate(dueDate);
-        		task.setDueTime(dueTime);
-        		task.setStatus(status);
-        		sqliteTaskDAO.updateTask(task);
+        		Event event = detailedEventView.getEvent();
+        		mainView.deleteEventView(event);
+        		event.setTitle(title);
+        		event.setDescription(description);
+        		event.setLocation(location);
+        		event.setStartDate(startDate);
+        		event.setStartTime(startTime);
+        		event.setEndDate(endDate);
+        		event.setEndTime(endTime);
+        		sqliteEventDAO.updateEvent(event);
         		//if update is successful
-        		mainView.addTaskView(task);
+        		mainView.addEventView(event);
         	}
         	
         	mainView.updateContentPanel();
-        	detailedTaskView.dispose();
+        	detailedEventView.dispose();
         	// Update task details based on user input
             //task.setTitle(titleField.getText());
             //task.setDescription(descriptionArea.getText());
@@ -137,32 +128,32 @@ public class EventController {
     
     // Action listener for the delete button
     private class DeleteButtonListener implements ActionListener {
-    	private DetailedTaskView detailedTaskView;
+    	private DetailedEventView detailedEventView;
     	private MainView mainView;
     	
-    	public DeleteButtonListener(DetailedTaskView detailedTaskView, MainView mainView) {
-    		this.detailedTaskView = detailedTaskView;
+    	public DeleteButtonListener(DetailedEventView detailedEventView, MainView mainView) {
+    		this.detailedEventView = detailedEventView;
     		this.mainView = mainView;
     	}
     	
         @Override
         public void actionPerformed(ActionEvent e) {
-        	SQLiteTaskDAO sqliteTaskDAO = new SQLiteTaskDAO();
+        	SQLiteEventDAO sqliteEventDAO = new SQLiteEventDAO();
         	String operation = "remove";
         	
         	// the task is in not yet created, so just close the window
-        	if (detailedTaskView.getTask() == null) {
+        	if (detailedEventView.getEvent() == null) {
         		operation = "close window";
         	}
         	
         	if (operation == "remove") {
-        		Task taskToRemove = detailedTaskView.getTask();
-        		int taskToRemoveID = taskToRemove.getId();
-        		sqliteTaskDAO.deleteTask(taskToRemoveID);
-        		mainView.deleteTaskView(taskToRemove);
+        		Event eventToRemove = detailedEventView.getEvent();
+        		int eventToRemoveID = eventToRemove.getId();
+        		sqliteEventDAO.deleteEvent(eventToRemoveID);
+        		mainView.deleteEventView(eventToRemove);
         	}
         	mainView.updateContentPanel();
-        	detailedTaskView.dispose();
+        	detailedEventView.dispose();
         }
     }
 }

@@ -81,10 +81,10 @@ public class DetailedEventView extends JFrame {
 	private void populateFields() {
         titleField.setText(event.getTitle());
         descriptionArea.setText(event.getDescription());
-        startDateField.setText(event.getStartDate().toString());
-        startTimeField.setText(event.getStartTime().toString());
-        endDateField.setText(event.getEndDate().toString());
-        endTimeField.setText(event.getEndTime().toString());
+        startDateField.setText(event.getFormattedStartDate());
+        startTimeField.setText(event.getFormattedStartTime());
+        endDateField.setText(event.getFormattedEndDate());
+        endTimeField.setText(event.getFormattedEndTime());
         locationArea.setText(event.getLocation());
     }
 	
@@ -96,6 +96,11 @@ public class DetailedEventView extends JFrame {
     // Method to read the value of descriptionArea
     public String getDescriptionAreaValue() {
         return descriptionArea.getText();
+    }
+    
+    // Method to read the value of locationArea
+    public String getLocationAreaValue() {
+        return locationArea.getText();
     }
 
     // Method to read the value of startDateField as LocalDate
@@ -126,7 +131,7 @@ public class DetailedEventView extends JFrame {
     	return deleteButton;
     }
     
-	public Event getTask() {
+	public Event getEvent() {
     	return event;
     }
 }
