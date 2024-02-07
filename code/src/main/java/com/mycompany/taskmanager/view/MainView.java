@@ -18,6 +18,8 @@ public class MainView extends JPanel {
     private List<EventView> eventViews;
     private List<TaskController> taskControllers;
     private List<EventController> eventControllers;
+    private List<Task> completedTasks;
+    private List<Event> completedEvents;
     
     private JButton createTaskButton;
     private JButton createEventButton;
@@ -29,6 +31,8 @@ public class MainView extends JPanel {
         eventViews = new ArrayList<>();
         taskControllers = new ArrayList<>();
         eventControllers = new ArrayList<>();
+        completedTasks = new ArrayList<>();
+        completedEvents = new ArrayList<>();
         
         contentPanel = new JPanel(); // Panel to hold task and event views        
         
@@ -58,10 +62,27 @@ public class MainView extends JPanel {
     }
     
     public void addTaskView(Task task) {
-    	TaskView taskView = new TaskView(task);
-		TaskController taskController = new TaskController(taskView, this);
-		taskControllers.add(taskController);
-		taskViews.add(taskView);
+    	// check on dueDate, dueTime and status before creating the taskView.
+    	if (task.getStatus().equals("Completed")) {
+    		// if task is completed add it to the list of completed tasks, but not display it.
+    		completedTasks.add(task);
+    		return;
+    	} else if (task.isTaskOverdue()) {
+    		// if task dueTime and dueDate is passed than display it, but on the top and in red
+    		// it's displayed on top thanks to the comparator.
+    		TaskView taskView = new TaskView(task);
+    		taskView.getTaskTitle().setForeground(Color.red);
+    		TaskController taskController = new TaskController(taskView, this);
+    		taskControllers.add(taskController);
+    		taskViews.add(taskView);
+    		return;
+    	} else {
+    		// if task dueDate is in the future than simply display it
+    		TaskView taskView = new TaskView(task);
+    		TaskController taskController = new TaskController(taskView, this);
+    		taskControllers.add(taskController);
+    		taskViews.add(taskView);
+    	}
     }
     
     public void deleteTaskView(Task taskToDelete) {
@@ -85,10 +106,18 @@ public class MainView extends JPanel {
     }
     
     public void addEventView(Event event) {
-    	EventView eventView = new EventView(event);
-		EventController eventController = new EventController(eventView, this);
-		eventControllers.add(eventController);
-		eventViews.add(eventView);
+    	// check on endDate and endTime creating the eventView.
+    	if (event.isEventOverdue()) {
+    		// if event is overdue add it to the list of completed events, but not display it.
+    		completedEvents.add(event);
+    		return;
+    	} else {
+    		// if not just display it
+    		EventView eventView = new EventView(event);
+    		EventController eventController = new EventController(eventView, this);
+    		eventControllers.add(eventController);
+    		eventViews.add(eventView);
+    	}
     }
     
     public void deleteEventView(Event eventToDelete) {
@@ -115,8 +144,9 @@ public class MainView extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTH;
         
-        List<Component> combinedList = new ArrayList<>(List.of(contentPanel.getComponents()));
-        
+        List<Component> combinedList = new ArrayList<>();
+        combinedList.addAll(taskViews);
+        combinedList.addAll(eventViews);
         
         // Sort the combined list by date and time
         Collections.sort(combinedList, new Comparator<Object>() {
@@ -159,15 +189,17 @@ public class MainView extends JPanel {
             }
         });
         
-        for (Object obj : combinedList) {
-        	contentPanel.add((Component) obj, constraints);
+        for (Component cmp : combinedList) {
+        	if (cmp instanceof TaskView) {
+        		
+        	}
+        	contentPanel.add(cmp, constraints);
         	constraints.gridy++;
         	contentPanel.add(Box.createVerticalStrut(10), constraints);
+        	
+        	contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL), constraints);
         	constraints.gridy++;
         }
-
-        // Add a separator (you can customize this as needed)
-        contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
 
         // Revalidate and repaint to update the UI
         revalidate();
