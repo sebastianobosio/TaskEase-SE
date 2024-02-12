@@ -59,9 +59,9 @@ public class DetailedTaskView extends JFrame {
         panel.add(titleField);
         panel.add(new JLabel("Description:"));
         panel.add(new JScrollPane(descriptionArea));
-        panel.add(new JLabel("Due Date:"));
+        panel.add(new JLabel("Due Date (dd-MM-yyyy):"));
         panel.add(dueDateField);
-        panel.add(new JLabel("Due Time:"));
+        panel.add(new JLabel("Due Time (HH:mm):"));
         panel.add(dueTimeField);
         panel.add(new JLabel("Status:"));
         panel.add(statusComboBox);

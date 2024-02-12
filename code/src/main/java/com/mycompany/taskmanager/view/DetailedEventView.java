@@ -63,13 +63,13 @@ public class DetailedEventView extends JFrame {
         panel.add(titleField);
         panel.add(new JLabel("Description:"));
         panel.add(new JScrollPane(descriptionArea));
-        panel.add(new JLabel("Start Date:"));
+        panel.add(new JLabel("Start Date (dd-MM-yyyy):"));
         panel.add(startDateField);
-        panel.add(new JLabel("Start Time:"));
+        panel.add(new JLabel("Start Time (HH:mm):"));
         panel.add(startTimeField);
-        panel.add(new JLabel("End Date:"));
+        panel.add(new JLabel("End Date (dd-MM-yyyy):"));
         panel.add(endDateField);
-        panel.add(new JLabel("End Time:"));
+        panel.add(new JLabel("End Time (HH:mm):"));
         panel.add(endTimeField);
         panel.add(new JLabel("Location"));
         panel.add(locationArea);

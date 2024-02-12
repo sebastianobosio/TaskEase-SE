@@ -2,6 +2,7 @@ package com.mycompany.taskmanager;
 
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.controller.MainController;
+import com.mycompany.taskmanager.model.MainModel;
 import com.mycompany.database.SQLiteDB;
 
 import javax.swing.*;
@@ -11,12 +12,15 @@ import java.sql.SQLException;
 public class TaskManagerApp {
 
 	public static void main(String[] args) {
-	
+		
+		// Initialize the main model
+		MainModel mainModel = new MainModel();
+		
 		// Create GUI components
-        MainView mainView = new MainView();
+        MainView mainView = new MainView(mainModel);
 
         // Create the main controller and pass the main view
-        MainController mainController = new MainController(mainView);
+        MainController mainController = new MainController(mainView, mainModel);
         
         // Initialize the DB
         try {

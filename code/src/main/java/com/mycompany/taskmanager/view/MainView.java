@@ -13,27 +13,17 @@ import com.mycompany.taskmanager.controller.EventController;
 import com.mycompany.taskmanager.controller.TaskController;
 import com.mycompany.taskmanager.model.Task;
 import com.mycompany.taskmanager.model.Event;
+import com.mycompany.taskmanager.model.MainModel;
 
-public class MainView extends JPanel {
-    private List<TaskView> taskViews;
-    private List<EventView> eventViews;
-    private List<TaskController> taskControllers;
-    private List<EventController> eventControllers;
-    private List<Task> completedTasks;
-    private List<Event> completedEvents;
-    
+public class MainView extends JPanel {  
+    private MainModel mainModel;
     private JButton createTaskButton;
     private JButton createEventButton;
     private JPanel contentPanel;
-
-    public MainView() {
+    
+    public MainView(MainModel mainModel) {
         // Initialize components
-        taskViews = new ArrayList<>();
-        eventViews = new ArrayList<>();
-        taskControllers = new ArrayList<>();
-        eventControllers = new ArrayList<>();
-        completedTasks = new ArrayList<>();
-        completedEvents = new ArrayList<>();
+    	this.mainModel = mainModel;
         
         contentPanel = new JPanel(); // Panel to hold task and event views        
         
@@ -54,85 +44,6 @@ public class MainView extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
         add(scrollPane);
         
-    }
-    
-    public void createTaskViews(List<Task> taskList) {
-    	for (Task task: taskList) {
-    		addTaskView(task);
-    	}
-    }
-    
-    public void addTaskView(Task task) {
-    	// check on dueDate, dueTime and status before creating the taskView.
-    	if (task.getStatus().equals("Completed")) {
-    		// if task is completed add it to the list of completed tasks, but not display it.
-    		completedTasks.add(task);
-    		return;
-    	} else if (task.isTaskOverdue()) {
-    		// if task dueTime and dueDate is passed than display it, but on the top and in red
-    		// it's displayed on top thanks to the comparator.
-    		TaskView taskView = new TaskView(task);
-    		taskView.getTaskTitle().setForeground(Color.red);
-    		TaskController taskController = new TaskController(taskView, this);
-    		taskControllers.add(taskController);
-    		taskViews.add(taskView);
-    		return;
-    	} else {
-    		// if task dueDate is in the future than simply display it
-    		TaskView taskView = new TaskView(task);
-    		TaskController taskController = new TaskController(taskView, this);
-    		taskControllers.add(taskController);
-    		taskViews.add(taskView);
-    	}
-    }
-    
-    public void deleteTaskView(Task taskToDelete) {
-    	// Remove taskViews that are build on the specific task model
-    	Iterator<TaskView> iterator = taskViews.iterator();
-        while (iterator.hasNext()) {
-        	TaskView taskView = iterator.next();
-            Task task = taskView.getTask();
-            if (task == taskToDelete) {
-                iterator.remove(); // Remove the current task
-                System.out.println("delete task view: " + taskViews);
-            }
-    	
-        }
-    }
-    
-    public void createEventViews(List<Event> eventList) {
-    	for (Event event: eventList) {
-    		addEventView(event);
-    	}
-    }
-    
-    public void addEventView(Event event) {
-    	// check on endDate and endTime creating the eventView.
-    	if (event.isEventOverdue()) {
-    		// if event is overdue add it to the list of completed events, but not display it.
-    		completedEvents.add(event);
-    		return;
-    	} else {
-    		// if not just display it
-    		EventView eventView = new EventView(event);
-    		EventController eventController = new EventController(eventView, this);
-    		eventControllers.add(eventController);
-    		eventViews.add(eventView);
-    	}
-    }
-    
-    public void deleteEventView(Event eventToDelete) {
-    	// Remove eventViews that are build on the specific event model
-    	Iterator<EventView> iterator = eventViews.iterator();
-        while (iterator.hasNext()) {
-        	EventView eventView = iterator.next();
-        	Event event = eventView.getEvent();
-            if (event == eventToDelete) {
-                iterator.remove(); // Remove the current event
-                System.out.println("delete event view: " + eventViews);
-            }
-    	
-        }
     }
     
     public void updateContentPanel() {
