@@ -16,8 +16,8 @@ public class Event {
     private LocalDate endDate;
     private LocalTime endTime;
     private String location;
-    private int id;
-
+    private int id;    
+    
     // Constructor
     public Event(String title, String description, String location, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         this.title = title;

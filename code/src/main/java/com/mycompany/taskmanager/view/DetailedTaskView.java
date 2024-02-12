@@ -90,11 +90,17 @@ public class DetailedTaskView extends JFrame {
 
     // Method to read the value of dueDateField as LocalDate
     public LocalDate getDueDateFieldValue() {
+    	if (dueDateField.getText().trim().isEmpty()) {
+    		return null;
+    	}
         return LocalDate.parse(dueDateField.getText(), dateFormatter);
     }
 
     // Method to read the value of dueTimeField as LocalTime
     public LocalTime getDueTimeFieldValue() {
+    	if (dueTimeField.getText().trim().isEmpty()) {
+    		return null;
+    	}
         return LocalTime.parse(dueTimeField.getText(), timeFormatter);
     }
 

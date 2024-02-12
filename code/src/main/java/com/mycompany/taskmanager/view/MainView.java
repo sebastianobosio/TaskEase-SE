@@ -2,6 +2,7 @@ package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -189,15 +190,24 @@ public class MainView extends JPanel {
             }
         });
         
+        LocalDate previousCmpDate = null;
+        
         for (Component cmp : combinedList) {
+        	LocalDate currentCmpDate = null;
         	if (cmp instanceof TaskView) {
-        		
+        		currentCmpDate = ((TaskView) cmp).getTask().getDueDate();
+        	} else if (cmp instanceof EventView) {
+        		currentCmpDate = ((EventView) cmp).getEvent().getStartDate();
         	}
+        	// if current cmp due/start date is different from the previous task/event due/start date than add a separator
+        	if (previousCmpDate != null && !currentCmpDate.equals(previousCmpDate)) {
+        		contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL), constraints);
+            }
+        	previousCmpDate = currentCmpDate;
+        	
         	contentPanel.add(cmp, constraints);
         	constraints.gridy++;
         	contentPanel.add(Box.createVerticalStrut(10), constraints);
-        	
-        	contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL), constraints);
         	constraints.gridy++;
         }
 
