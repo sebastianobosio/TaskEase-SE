@@ -5,6 +5,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.mycompany.taskmanager.model.Event;
 
@@ -105,22 +106,54 @@ public class DetailedEventView extends JFrame {
 
     // Method to read the value of startDateField as LocalDate
     public LocalDate getStartDateFieldValue() {
-        return LocalDate.parse(startDateField.getText(), dateFormatter);
+    	if (startDateField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+            return LocalDate.parse(startDateField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 
     // Method to read the value of startTimeField as LocalTime
     public LocalTime getStartTimeFieldValue() {
-        return LocalTime.parse(startTimeField.getText(), timeFormatter);
+    	if (startTimeField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+            return LocalTime.parse(startTimeField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
     
     // Method to read the value of endDateField as LocalDate
     public LocalDate getEndDateFieldValue() {
-        return LocalDate.parse(endDateField.getText(), dateFormatter);
+    	if (endDateField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+            return LocalDate.parse(endDateField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
     
     // Method to read the value of endTimeField as LocalTime
     public LocalTime getEndTimeFieldValue() {
-        return LocalTime.parse(endTimeField.getText(), timeFormatter);
+    	if (endTimeField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+            return LocalTime.parse(endTimeField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 	
 	public JButton getSaveButton() {

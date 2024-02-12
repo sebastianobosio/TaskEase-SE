@@ -82,7 +82,7 @@ public class TaskController {
     		LocalDate dueDate = detailedTaskView.getDueDateFieldValue();
     		LocalTime dueTime = detailedTaskView.getDueTimeFieldValue();
     		// Validate fields
-    	    if (!validateFields(title, description, statusAsString, dueDate, dueTime)) {
+    	    if (!validateFields(title, statusAsString, dueDate, dueTime)) {
     	        return;
     	    }
 
@@ -124,17 +124,18 @@ public class TaskController {
     		mainView.addTaskView(newTaskWithID);
 		}
 
-		private boolean validateFields(String title, String description, String statusAsString, LocalDate dueDate,
-				LocalTime dueTime) {
+		private boolean validateFields(String title, String statusAsString, LocalDate dueDate, LocalTime dueTime) {
 			
 			String message = null;
 			
 			if (title.isEmpty()) {
 	            message = "Title cannot be empty.";
-	        } else if (dueDate == null || dueDate.isBefore(LocalDate.now())) {
-	            message = "Due date must be in the future or not empty";
+	        } else if (dueDate == null) {
+	            message = "Invalid due date. Mispelled or empty.";
+	        } else if (dueDate.isBefore(LocalDate.now())) {
+	        	message = "Due date must be in the future";
 	        } else if (dueTime == null) {
-	            message = "Due time cannot be empty.";
+	            message = "Invalid due time. Mispelled or empty.";
 	        } else {
 	            TaskStatus status = convertStatus(statusAsString);
 	            if (status == null) {

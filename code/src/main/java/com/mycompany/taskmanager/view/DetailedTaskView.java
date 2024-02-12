@@ -5,6 +5,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.mycompany.taskmanager.model.Task;
 
@@ -93,7 +94,12 @@ public class DetailedTaskView extends JFrame {
     	if (dueDateField.getText().trim().isEmpty()) {
     		return null;
     	}
-        return LocalDate.parse(dueDateField.getText(), dateFormatter);
+    	try {
+            return LocalDate.parse(dueDateField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 
     // Method to read the value of dueTimeField as LocalTime
@@ -101,7 +107,12 @@ public class DetailedTaskView extends JFrame {
     	if (dueTimeField.getText().trim().isEmpty()) {
     		return null;
     	}
-        return LocalTime.parse(dueTimeField.getText(), timeFormatter);
+    	try {
+    		return LocalTime.parse(dueTimeField.getText(), timeFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 
     // Method to read the selected value from statusComboBox
