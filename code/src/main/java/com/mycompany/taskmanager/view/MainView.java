@@ -15,7 +15,7 @@ import com.mycompany.taskmanager.model.Task;
 import com.mycompany.taskmanager.model.Event;
 import com.mycompany.taskmanager.model.MainModel;
 
-public class MainView extends JPanel {  
+public class MainView extends JPanel{  
     private MainModel mainModel;
     private JButton createTaskButton;
     private JButton createEventButton;
@@ -46,8 +46,28 @@ public class MainView extends JPanel {
         
     }
     
+    // Methods to interact with the model
+    public void addTaskView(Task task) {
+        mainModel.addTaskView(task, this);
+    }
+
+    public void deleteTaskView(Task task) {
+        mainModel.deleteTaskView(task);
+    }
+    
+    // Methods to interact with the model
+    public void addEventView(Event event) {
+        mainModel.addEventView(event, this);
+    }
+
+    public void deleteEventView(Event event) {
+        mainModel.deleteEventView(event);
+    }
+    
     public void updateContentPanel() {
         // Clear the existing content panel
+    	
+    	List<Component> combinedList = mainModel.getTaskEventList();
         contentPanel.removeAll();
         
         GridBagConstraints constraints = new GridBagConstraints();
@@ -55,51 +75,6 @@ public class MainView extends JPanel {
         constraints.gridy = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTH;
-        
-        List<Component> combinedList = new ArrayList<>();
-        combinedList.addAll(taskViews);
-        combinedList.addAll(eventViews);
-        
-        // Sort the combined list by date and time
-        Collections.sort(combinedList, new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1 instanceof TaskView && o2 instanceof TaskView) {
-                    TaskView taskView1 = (TaskView) o1;
-                    TaskView taskView2 = (TaskView) o2;
-                    int dateComparison = taskView1.getTask().getDueDate().compareTo(taskView2.getTask().getDueDate());
-                    if (dateComparison != 0) {
-                        return dateComparison;
-                    }
-                    return taskView1.getTask().getDueTime().compareTo(taskView2.getTask().getDueTime());
-                } else if (o1 instanceof EventView && o2 instanceof EventView) {
-                    EventView eventView1 = (EventView) o1;
-                    EventView eventView2 = (EventView) o2;
-                    int dateComparison = eventView1.getEvent().getStartDate().compareTo(eventView2.getEvent().getStartDate());
-                    if (dateComparison != 0) {
-                        return dateComparison;
-                    }
-                    return eventView1.getEvent().getStartTime().compareTo(eventView2.getEvent().getStartTime());
-                } else if (o1 instanceof EventView && o2 instanceof TaskView) {
-                	EventView eventView = (EventView) o1;
-                	TaskView taskView = (TaskView) o2;
-                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
-                	if (dateComparison != 0) {
-                		return dateComparison;
-                	}
-                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
-                } else if (o1 instanceof TaskView && o2 instanceof EventView) {
-                	TaskView taskView = (TaskView) o1;
-                	EventView eventView = (EventView) o2;
-                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
-                	if (dateComparison != 0) {
-                		return dateComparison;
-                	}
-                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
-                }
-                return 0;
-            }
-        });
         
         LocalDate previousCmpDate = null;
         

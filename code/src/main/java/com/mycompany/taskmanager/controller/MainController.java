@@ -28,9 +28,9 @@ public class MainController {
         mainView.getCreateEventButton().addActionListener(new CreateEventButtonListener());
     }
     
-    public void updateMainView() {
-    	mainModel.createTaskViews(sqliteTaskDAO.getAllTasks());
-    	mainModel.createEventViews(sqliteEventDAO.getAllEvents());
+    public void initializeMainView() {
+    	mainModel.createTaskViews(sqliteTaskDAO.getAllTasks(), mainView);
+    	mainModel.createEventViews(sqliteEventDAO.getAllEvents(), mainView);
     	mainView.updateContentPanel();
     }
     

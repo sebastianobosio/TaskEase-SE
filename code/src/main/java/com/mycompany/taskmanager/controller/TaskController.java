@@ -18,7 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
-public class TaskController {
+public class TaskController{
 	private TaskView taskView; // used for edit existing task
 	private DetailedTaskView detailedTaskView; // used for creation of new task
 	private MainView mainView;
@@ -30,7 +30,7 @@ public class TaskController {
         taskView.getTaskTitle().addMouseListener(new TaskViewMouseListener());
     }
     
-    // Controller for the creation of the new Task, it adds the save and delete listenere, but not the listener o
+    // Controller for the creation of the new Task, it adds the save and delete listener, but not the listener o
     // on the title click
     public TaskController(DetailedTaskView detailedTaskView, MainView mainView) {
     	this.detailedTaskView = detailedTaskView;
