@@ -24,10 +24,10 @@ public class MainModel {
 	private List<Event> completedEvents;
 	
 	public MainModel() {
-        this.taskViews = new ArrayList<>();
-        this.eventViews = new ArrayList<>();
-    	this.completedTasks = new ArrayList<>();
-    	this.completedEvents = new ArrayList<>();
+		this.taskViews = new ArrayList<>();
+		this.eventViews = new ArrayList<>();
+		this.completedTasks = new ArrayList<>();
+		this.completedEvents = new ArrayList<>();
     }
 	
 	public void createTaskViews(List<Task> taskList, MainView mainView) {
