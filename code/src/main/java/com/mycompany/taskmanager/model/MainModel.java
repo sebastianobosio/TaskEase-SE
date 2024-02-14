@@ -218,7 +218,6 @@ public class MainModel {
 	
 	public void setFilterBy(ViewOption filter) {
 		filterBy = filter;
-		System.out.println("porco dio");
 	}
     
 }
