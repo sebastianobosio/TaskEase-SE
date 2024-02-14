@@ -31,7 +31,7 @@ public class TaskManagerApp {
         	System.exit(1); // Exit application if database initialization fails
         }
         
-        mainController.updateMainView();
+        mainController.initializeMainView();
         
         // Set up the main frame
         JFrame frame = new JFrame("TaskEase");
