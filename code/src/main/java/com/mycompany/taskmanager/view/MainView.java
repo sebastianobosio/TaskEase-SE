@@ -2,7 +2,10 @@ package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,23 +13,17 @@ import com.mycompany.taskmanager.controller.EventController;
 import com.mycompany.taskmanager.controller.TaskController;
 import com.mycompany.taskmanager.model.Task;
 import com.mycompany.taskmanager.model.Event;
+import com.mycompany.taskmanager.model.MainModel;
 
-public class MainView extends JPanel {
-    private List<TaskView> taskViews;
-    private List<EventView> eventViews;
-    private List<TaskController> taskControllers;
-    private List<EventController> eventControllers;
-    
+public class MainView extends JPanel {  
+    private MainModel mainModel;
     private JButton createTaskButton;
     private JButton createEventButton;
     private JPanel contentPanel;
-
-    public MainView() {
+    
+    public MainView(MainModel mainModel) {
         // Initialize components
-        taskViews = new ArrayList<>();
-        eventViews = new ArrayList<>();
-        taskControllers = new ArrayList<>();
-        eventControllers = new ArrayList<>();
+    	this.mainModel = mainModel;
         
         contentPanel = new JPanel(); // Panel to hold task and event views        
         
@@ -49,60 +46,7 @@ public class MainView extends JPanel {
         
     }
     
-    public void createTaskViews(List<Task> taskList) {
-    	for (Task task: taskList) {
-    		addTaskView(task);
-    	}
-    }
-    
-    public void addTaskView(Task task) {
-    	TaskView taskView = new TaskView(task);
-		TaskController taskController = new TaskController(taskView, this);
-		taskControllers.add(taskController);
-		taskViews.add(taskView);
-    }
-    
-    public void deleteTaskView(Task taskToDelete) {
-    	// Remove taskViews that are build on the specific task model
-    	Iterator<TaskView> iterator = taskViews.iterator();
-        while (iterator.hasNext()) {
-            Task task = iterator.next().getTask();
-            if (task == taskToDelete) {
-                iterator.remove(); // Remove the current task
-                System.out.println("delete task view: " + taskViews);
-            }
-    	
-        }
-    }
-    
-    public void createEventViews(List<Event> eventList) {
-    	for (Event event: eventList) {
-    		addEventView(event);
-    	}
-    }
-    
-    public void addEventView(Event event) {
-    	EventView eventView = new EventView(event);
-		EventController eventController = new EventController(eventView, this);
-		eventControllers.add(eventController);
-		eventViews.add(eventView);
-    }
-    
-    public void deleteEventView(Event eventToDelete) {
-    	// Remove taskViews that are build on the specific task model
-    	Iterator<EventView> iterator = eventViews.iterator();
-        while (iterator.hasNext()) {
-        	Event event = iterator.next().getEvent();
-            if (event == eventToDelete) {
-                iterator.remove(); // Remove the current task
-                System.out.println("delete event view: " + eventViews);
-            }
-    	
-        }
-    }
-    
     public void updateContentPanel() {
-    	System.out.println(taskViews);
         // Clear the existing content panel
         contentPanel.removeAll();
         
@@ -112,23 +56,70 @@ public class MainView extends JPanel {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTH;
         
-        // Add each TaskView to the content panel
-        for (TaskView taskView : taskViews) {
-        	contentPanel.add(taskView, constraints);
-            constraints.gridy++; // Move to the next row
-            contentPanel.add(Box.createVerticalStrut(10), constraints); // Add vertical space
-            constraints.gridy++; // Move to the next row
-        }
-
-        // Add a separator (you can customize this as needed)
-        contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
-
-        // Add each EventView to the content panel
-        for (EventView eventView : eventViews) {
-        	constraints.gridy++; // Move to the next row
-            contentPanel.add(eventView, constraints);
-            constraints.gridy++; // Move to the next row
-            contentPanel.add(Box.createVerticalStrut(10), constraints); // Add vertical space
+        List<Component> combinedList = new ArrayList<>();
+        combinedList.addAll(taskViews);
+        combinedList.addAll(eventViews);
+        
+        // Sort the combined list by date and time
+        Collections.sort(combinedList, new Comparator<Object>() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                if (o1 instanceof TaskView && o2 instanceof TaskView) {
+                    TaskView taskView1 = (TaskView) o1;
+                    TaskView taskView2 = (TaskView) o2;
+                    int dateComparison = taskView1.getTask().getDueDate().compareTo(taskView2.getTask().getDueDate());
+                    if (dateComparison != 0) {
+                        return dateComparison;
+                    }
+                    return taskView1.getTask().getDueTime().compareTo(taskView2.getTask().getDueTime());
+                } else if (o1 instanceof EventView && o2 instanceof EventView) {
+                    EventView eventView1 = (EventView) o1;
+                    EventView eventView2 = (EventView) o2;
+                    int dateComparison = eventView1.getEvent().getStartDate().compareTo(eventView2.getEvent().getStartDate());
+                    if (dateComparison != 0) {
+                        return dateComparison;
+                    }
+                    return eventView1.getEvent().getStartTime().compareTo(eventView2.getEvent().getStartTime());
+                } else if (o1 instanceof EventView && o2 instanceof TaskView) {
+                	EventView eventView = (EventView) o1;
+                	TaskView taskView = (TaskView) o2;
+                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
+                	if (dateComparison != 0) {
+                		return dateComparison;
+                	}
+                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
+                } else if (o1 instanceof TaskView && o2 instanceof EventView) {
+                	TaskView taskView = (TaskView) o1;
+                	EventView eventView = (EventView) o2;
+                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
+                	if (dateComparison != 0) {
+                		return dateComparison;
+                	}
+                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
+                }
+                return 0;
+            }
+        });
+        
+        LocalDate previousCmpDate = null;
+        
+        for (Component cmp : combinedList) {
+        	LocalDate currentCmpDate = null;
+        	if (cmp instanceof TaskView) {
+        		currentCmpDate = ((TaskView) cmp).getTask().getDueDate();
+        	} else if (cmp instanceof EventView) {
+        		currentCmpDate = ((EventView) cmp).getEvent().getStartDate();
+        	}
+        	// if current cmp due/start date is different from the previous task/event due/start date than add a separator
+        	if (previousCmpDate != null && !currentCmpDate.equals(previousCmpDate)) {
+        		contentPanel.add(new JSeparator(SwingConstants.HORIZONTAL), constraints);
+            }
+        	previousCmpDate = currentCmpDate;
+        	
+        	contentPanel.add(cmp, constraints);
+        	constraints.gridy++;
+        	contentPanel.add(Box.createVerticalStrut(10), constraints);
+        	constraints.gridy++;
         }
 
         // Revalidate and repaint to update the UI

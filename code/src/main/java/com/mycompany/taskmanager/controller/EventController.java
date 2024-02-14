@@ -4,11 +4,16 @@ import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.taskmanager.model.Event;
+import com.mycompany.taskmanager.model.Task.TaskStatus;
 import com.mycompany.taskmanager.view.DetailedEventView;
 
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -70,61 +75,92 @@ public class EventController {
         @Override
         public void actionPerformed(ActionEvent e) {
         	SQLiteEventDAO sqliteEventDAO = new SQLiteEventDAO();
-        	String operation = "update";
         	
         	// get field values
         	String title = detailedEventView.getTitleFieldValue();
     		String description = detailedEventView.getDescriptionAreaValue();
     		String location = detailedEventView.getLocationAreaValue();
-    		System.out.println(description);
     		LocalDate startDate = detailedEventView.getStartDateFieldValue();
     		LocalTime startTime = detailedEventView.getStartTimeFieldValue();
     		LocalDate endDate = detailedEventView.getEndDateFieldValue();
     		LocalTime endTime = detailedEventView.getEndTimeFieldValue();
-    		
-        	if (detailedEventView.getEvent() == null) {
-        		operation = "create";
-        		// i have to check the field values.
-        		Event newEvent = new Event(title, description, location, startDate, startTime, endDate, endTime);
-        		// save event and update view panel
-        		int newEventID = sqliteEventDAO.saveEvent(newEvent);
-        		Event newEventWithID = sqliteEventDAO.getEventById(newEventID);
-        		// i have to add the event with the ID retrieved from the DB to make the update operation possible
-        		mainView.addEventView(newEventWithID);
-        	}
-        	
-        	if (operation == "update") {
-        		Event event = detailedEventView.getEvent();
-        		mainView.deleteEventView(event);
-        		event.setTitle(title);
-        		event.setDescription(description);
-        		event.setLocation(location);
-        		event.setStartDate(startDate);
-        		event.setStartTime(startTime);
-        		event.setEndDate(endDate);
-        		event.setEndTime(endTime);
-        		sqliteEventDAO.updateEvent(event);
-        		//if update is successful
-        		mainView.addEventView(event);
-        	}
+    		// Validate fields
+    	    if (!validateFields(title, startDate, startTime, endDate, endTime)) {
+    	        return;
+    	    }
+    	    
+    	    Event event = detailedEventView.getEvent();
+    	    
+    	    if (event == null) {
+                createNewEvent(sqliteEventDAO, title, description, location, startDate, startTime, endDate, endTime);
+            } else {
+                updateEvent(sqliteEventDAO, event, title, description, location, startDate, startTime, endDate, endTime);
+            }   	
         	
         	mainView.updateContentPanel();
         	detailedEventView.dispose();
-        	// Update task details based on user input
-            //task.setTitle(titleField.getText());
-            //task.setDescription(descriptionArea.getText());
-            // Parse and set due date from dueDateField
-            // Set task status from statusComboBox.getSelectedItem()
-            // date field should be parsed as Date(string). 
-            // save operation
-        	// check on the fields. If one is empty saves not possible-> open an error window
-        	// check on detailedTaskView.getTask(), if it returns the Task instance then the task exist
-        	// so the save operation is a modification of the DB.
-        	// if it does not return a Task then the DetailedTaskView was created via the CreateTaskButton
-        	// and so it use a different constructor. So the save is an add to the DB.
         }
         
+        private void updateEvent(SQLiteEventDAO sqliteEventDAO, Event event, String title, String description,
+				String location, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        	mainView.deleteEventView(event);
+    		event.setTitle(title);
+    		event.setDescription(description);
+    		event.setLocation(location);
+    		event.setStartDate(startDate);
+    		event.setStartTime(startTime);
+    		event.setEndDate(endDate);
+    		event.setEndTime(endTime);
+    		sqliteEventDAO.updateEvent(event);
+    		//if update is successful
+    		mainView.addEventView(event);
+		}
+
+		private void createNewEvent(SQLiteEventDAO sqliteEventDAO, String title, String description, String location,
+				LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        	// i have to check the field values.
+    		Event newEvent = new Event(title, description, location, startDate, startTime, endDate, endTime);
+    		// save event and update view panel
+    		int newEventID = sqliteEventDAO.saveEvent(newEvent);
+    		Event newEventWithID = sqliteEventDAO.getEventById(newEventID);
+    		// i have to add the event with the ID retrieved from the DB to make the update operation possible
+    		mainView.addEventView(newEventWithID);
+		}
+
+		private boolean validateFields(String title, LocalDate startDate, LocalTime startTime, 
+        		LocalDate endDate, LocalTime endTime) {
+			
+			String message = null;
+			
+			if (title.isEmpty()) {
+		        message = "Title cannot be empty.";
+		    } else if (startDate == null || startDate.isBefore(LocalDate.now())) {
+		        message = "Start date must be in the future and not empty.";
+		    } else if (startTime == null) {
+		        message = "Mispelled start time or empty.";
+		    } else if (endDate == null) {
+		        message = "Mispelled end date or empty.";
+		    } else if (endTime == null) {
+		        message = "Mispelled end time or empty.";
+		    } else if (endDate.isBefore(startDate) || (endDate.isEqual(startDate) && endTime.isBefore(startTime))) {
+		        message = "End date and time must be after start date and time.";
+		    }
+
+	        if (message != null) {
+	            displayErrorWindow(message);
+	            return false;
+	        }
+
+		    return true;
+		}
+        
+        private void displayErrorWindow(String message) {
+			JFrame frame = new JFrame("Error");
+	        JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
+	    }
     }
+    
+    
     
     // Action listener for the delete button
     private class DeleteButtonListener implements ActionListener {

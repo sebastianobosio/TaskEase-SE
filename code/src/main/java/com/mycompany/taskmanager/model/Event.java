@@ -16,8 +16,8 @@ public class Event {
     private LocalDate endDate;
     private LocalTime endTime;
     private String location;
-    private int id;
-
+    private int id;    
+    
     // Constructor
     public Event(String title, String description, String location, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         this.title = title;
@@ -39,6 +39,22 @@ public class Event {
         this.endDate = endDate;
         this.endTime = endTime;
         this.location = location;
+    }
+    
+    public boolean isEventOverdue() {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+        
+        // Check if the due date is before today's date
+        if (endDate.isBefore(today)) {
+            return true;
+        } else if (endDate.isEqual(today)) {
+            // If the due date is today, check if the due time has passed
+            return endTime.isBefore(now);
+        } else {
+            // If the due date is in the future, the task is not overdue
+            return false;
+        }
     }
     
     public int getId() {

@@ -40,6 +40,22 @@ public class Task {
         this.status = status;
 	}
 	
+	public boolean isTaskOverdue() {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+        
+        // Check if the due date is before today's date
+        if (dueDate.isBefore(today)) {
+            return true;
+        } else if (dueDate.isEqual(today)) {
+            // If the due date is today, check if the due time has passed
+            return dueTime.isBefore(now);
+        } else {
+            // If the due date is in the future, the task is not overdue
+            return false;
+        }
+    }
+	
 	public int getId() {
 		return id;
 	}

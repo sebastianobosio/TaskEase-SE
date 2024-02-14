@@ -10,6 +10,10 @@ import com.mycompany.taskmanager.view.MainView;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -68,65 +72,102 @@ public class TaskController {
     	
         @Override
         public void actionPerformed(ActionEvent e) {
+        	
         	SQLiteTaskDAO sqliteTaskDAO = new SQLiteTaskDAO();
-        	String operation = "update";
         	
         	// get field values
         	String title = detailedTaskView.getTitleFieldValue();
     		String description = detailedTaskView.getDescriptionAreaValue();
-    		System.out.println(description);
     		String statusAsString = detailedTaskView.getStatusComboBoxValue();
-    		TaskStatus status = null;
-    		if (statusAsString == "Completed") {
-    			status = TaskStatus.COMPLETED;
-    	    } else if (statusAsString == "Not Started") {
-    	    	status = TaskStatus.NOTSTARTED;
-    	    } else if (statusAsString == "In Progress") {
-    	    	status = TaskStatus.ONGOING;
-    	    }
-    		System.out.println("i'm here");
     		LocalDate dueDate = detailedTaskView.getDueDateFieldValue();
     		LocalTime dueTime = detailedTaskView.getDueTimeFieldValue();
-    		
-        	if (detailedTaskView.getTask() == null) {
-        		operation = "create";
-        		// i have to check the field values.
-        		Task newTask = new Task(title, description, dueDate, dueTime, status);
-        		// save task and update view panel
-        		int newTaskID = sqliteTaskDAO.saveTask(newTask);
-        		Task newTaskWithID = sqliteTaskDAO.getTaskById(newTaskID);
-        		// i have to add the task with the ID retrieved from the DB to make the update operation possible
-        		mainView.addTaskView(newTaskWithID);
-        	}
-        	
-        	if (operation == "update") {
-        		Task task = detailedTaskView.getTask();
-        		mainView.deleteTaskView(task);
-        		task.setTitle(title);
-        		task.setDescription(description);
-        		task.setDueDate(dueDate);
-        		task.setDueTime(dueTime);
-        		task.setStatus(status);
-        		sqliteTaskDAO.updateTask(task);
-        		//if update is successful
-        		mainView.addTaskView(task);
-        	}
+    		// Validate fields
+    	    if (!validateFields(title, statusAsString, dueDate, dueTime)) {
+    	        return;
+    	    }
+
+            Task task = detailedTaskView.getTask();
+            if (task == null) {
+                createNewTask(sqliteTaskDAO, title, description, statusAsString, dueDate, dueTime);
+            } else {
+                updateTask(sqliteTaskDAO, task, title, description, statusAsString, dueDate, dueTime);
+            }
         	
         	mainView.updateContentPanel();
         	detailedTaskView.dispose();
-        	// Update task details based on user input
-            //task.setTitle(titleField.getText());
-            //task.setDescription(descriptionArea.getText());
-            // Parse and set due date from dueDateField
-            // Set task status from statusComboBox.getSelectedItem()
-            // date field should be parsed as Date(string). 
-            // save operation
-        	// check on the fields. If one is empty saves not possible-> open an error window
-        	// check on detailedTaskView.getTask(), if it returns the Task instance then the task exist
-        	// so the save operation is a modification of the DB.
-        	// if it does not return a Task then the DetailedTaskView was created via the CreateTaskButton
-        	// and so it use a different constructor. So the save is an add to the DB.
         }
+
+		private void updateTask(SQLiteTaskDAO sqliteTaskDAO, Task task, String title, String description,
+				String statusAsString, LocalDate dueDate, LocalTime dueTime) {
+			mainView.deleteTaskView(task);
+    		task.setTitle(title);
+    		task.setDescription(description);
+    		task.setDueDate(dueDate);
+    		task.setDueTime(dueTime);
+    		TaskStatus status = convertStatus(statusAsString);
+    		task.setStatus(status);
+    		sqliteTaskDAO.updateTask(task);
+    		//if update is successful
+    		mainView.addTaskView(task);
+			
+		}
+
+		private void createNewTask(SQLiteTaskDAO sqliteTaskDAO, String title, String description, String statusAsString,
+				LocalDate dueDate, LocalTime dueTime) {
+			TaskStatus status = convertStatus(statusAsString);
+			// i have to check the field values.
+    		Task newTask = new Task(title, description, dueDate, dueTime, status);
+    		// save task and update view panel
+    		int newTaskID = sqliteTaskDAO.saveTask(newTask);
+    		Task newTaskWithID = sqliteTaskDAO.getTaskById(newTaskID);
+    		// i have to add the task with the ID retrieved from the DB to make the update operation possible
+    		mainView.addTaskView(newTaskWithID);
+		}
+
+		private boolean validateFields(String title, String statusAsString, LocalDate dueDate, LocalTime dueTime) {
+			
+			String message = null;
+			
+			if (title.isEmpty()) {
+	            message = "Title cannot be empty.";
+	        } else if (dueDate == null) {
+	            message = "Invalid due date. Mispelled or empty.";
+	        } else if (dueDate.isBefore(LocalDate.now())) {
+	        	message = "Due date must be in the future";
+	        } else if (dueTime == null) {
+	            message = "Invalid due time. Mispelled or empty.";
+	        } else {
+	            TaskStatus status = convertStatus(statusAsString);
+	            if (status == null) {
+	                message = "Invalid status.";
+	            }
+	        }
+
+	        if (message != null) {
+	            displayErrorWindow(message);
+	            return false;
+	        }
+
+		    return true;
+		}
+
+		private void displayErrorWindow(String message) {
+			JFrame frame = new JFrame("Error");
+	        JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+
+		private TaskStatus convertStatus(String statusAsString) {
+			switch (statusAsString) {
+	        case "Completed":
+	            return TaskStatus.COMPLETED;
+	        case "Not Started":
+	            return TaskStatus.NOTSTARTED;
+	        case "In Progress":
+	            return TaskStatus.ONGOING;
+	        default:
+	            return null;
+			}
+		}
         
     }
     

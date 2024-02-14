@@ -8,6 +8,7 @@ import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.database.SQLiteTaskDAO;
 import com.mycompany.taskmanager.model.Event;
+import com.mycompany.taskmanager.model.MainModel;
 import com.mycompany.taskmanager.model.Task;
 
 import java.awt.event.ActionEvent;
@@ -15,20 +16,21 @@ import java.awt.event.ActionListener;
 
 public class MainController {
     private MainView mainView;
+    private MainModel mainModel;
     SQLiteTaskDAO sqliteTaskDAO = new SQLiteTaskDAO();
     SQLiteEventDAO sqliteEventDAO = new SQLiteEventDAO();
     
-    public MainController(MainView mainView) {
+    public MainController(MainView mainView, MainModel mainModel) {
         this.mainView = mainView;
-
+        this.mainModel = mainModel;
         // Attach action listeners to buttons
         mainView.getCreateTaskButton().addActionListener(new CreateTaskButtonListener());
         mainView.getCreateEventButton().addActionListener(new CreateEventButtonListener());
     }
     
     public void updateMainView() {
-    	mainView.createTaskViews(sqliteTaskDAO.getAllTasks());
-    	mainView.createEventViews(sqliteEventDAO.getAllEvents());
+    	mainModel.createTaskViews(sqliteTaskDAO.getAllTasks());
+    	mainModel.createEventViews(sqliteEventDAO.getAllEvents());
     	mainView.updateContentPanel();
     }
     

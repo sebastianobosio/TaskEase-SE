@@ -5,6 +5,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.mycompany.taskmanager.model.Task;
 
@@ -58,9 +59,9 @@ public class DetailedTaskView extends JFrame {
         panel.add(titleField);
         panel.add(new JLabel("Description:"));
         panel.add(new JScrollPane(descriptionArea));
-        panel.add(new JLabel("Due Date:"));
+        panel.add(new JLabel("Due Date (dd-MM-yyyy):"));
         panel.add(dueDateField);
-        panel.add(new JLabel("Due Time:"));
+        panel.add(new JLabel("Due Time (HH:mm):"));
         panel.add(dueTimeField);
         panel.add(new JLabel("Status:"));
         panel.add(statusComboBox);
@@ -90,12 +91,28 @@ public class DetailedTaskView extends JFrame {
 
     // Method to read the value of dueDateField as LocalDate
     public LocalDate getDueDateFieldValue() {
-        return LocalDate.parse(dueDateField.getText(), dateFormatter);
+    	if (dueDateField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+            return LocalDate.parse(dueDateField.getText(), dateFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 
     // Method to read the value of dueTimeField as LocalTime
     public LocalTime getDueTimeFieldValue() {
-        return LocalTime.parse(dueTimeField.getText(), timeFormatter);
+    	if (dueTimeField.getText().trim().isEmpty()) {
+    		return null;
+    	}
+    	try {
+    		return LocalTime.parse(dueTimeField.getText(), timeFormatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Error parsing due date: " + e.getMessage());
+            return null;
+        }
     }
 
     // Method to read the selected value from statusComboBox
