@@ -2,6 +2,8 @@ package com.mycompany.taskmanager.model;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,15 +15,16 @@ import com.mycompany.taskmanager.controller.TaskController;
 import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.view.TaskView;
+import com.mycompany.taskmanager.view.ViewOption;
 
 public class MainModel {
-
 	private List<TaskView> taskViews;
 	private List<EventView> eventViews;
 	private List<TaskController> taskControllers;
 	private List<EventController> eventControllers;
 	private List<Task> completedTasks;
 	private List<Event> completedEvents;
+	private ViewOption filterBy = ViewOption.BOTH; // set Both as default the same as in the mainView
 	
 	public MainModel() {
 		this.taskViews = new ArrayList<>();
@@ -109,54 +112,101 @@ public class MainModel {
         }
     }
     
-    public List<Component> getTaskEventList() {
+    public List<Component> fetchData() {
     	List<Component> combinedList = new ArrayList<>();
-        combinedList.addAll(taskViews);
-        combinedList.addAll(eventViews);
-        
-        // Sort the combined list by date and time
-        Collections.sort(combinedList, new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (o1 instanceof TaskView && o2 instanceof TaskView) {
-                    TaskView taskView1 = (TaskView) o1;
-                    TaskView taskView2 = (TaskView) o2;
-                    int dateComparison = taskView1.getTask().getDueDate().compareTo(taskView2.getTask().getDueDate());
-                    if (dateComparison != 0) {
-                        return dateComparison;
-                    }
-                    return taskView1.getTask().getDueTime().compareTo(taskView2.getTask().getDueTime());
-                } else if (o1 instanceof EventView && o2 instanceof EventView) {
-                    EventView eventView1 = (EventView) o1;
-                    EventView eventView2 = (EventView) o2;
-                    int dateComparison = eventView1.getEvent().getStartDate().compareTo(eventView2.getEvent().getStartDate());
-                    if (dateComparison != 0) {
-                        return dateComparison;
-                    }
-                    return eventView1.getEvent().getStartTime().compareTo(eventView2.getEvent().getStartTime());
-                } else if (o1 instanceof EventView && o2 instanceof TaskView) {
-                	EventView eventView = (EventView) o1;
-                	TaskView taskView = (TaskView) o2;
-                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
-                	if (dateComparison != 0) {
-                		return dateComparison;
-                	}
-                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
-                } else if (o1 instanceof TaskView && o2 instanceof EventView) {
-                	TaskView taskView = (TaskView) o1;
-                	EventView eventView = (EventView) o2;
-                	int dateComparison = eventView.getEvent().getStartDate().compareTo(taskView.getTask().getDueDate());
-                	if (dateComparison != 0) {
-                		return dateComparison;
-                	}
-                	return eventView.getEvent().getStartTime().compareTo(taskView.getTask().getDueTime());
-                }
-                return 0;
-            }
-        });
-        
+    	
+    	// Add and sort elements based on the filter
+        switch (filterBy) {
+            case TASKS:
+                combinedList.addAll(taskViews);
+                // Sort only tasks
+                Collections.sort(combinedList, new CombinedComparator()); // it will only use the TaskComparator
+                break;
+            case EVENTS:
+                combinedList.addAll(eventViews);
+                // Sort only events
+                Collections.sort(combinedList, new CombinedComparator());
+                break;
+            case BOTH:
+                combinedList.addAll(taskViews);
+                combinedList.addAll(eventViews);
+                // Sort both tasks and events together
+                Collections.sort(combinedList, new CombinedComparator());
+                break;
+        }
+
         return combinedList;
+    	
     }
+    
+    // Comparator for tasks, i cannot use it directly because combinedList is made of <Component>.
+    private class TaskComparator implements Comparator<TaskView> {
+        @Override
+        public int compare(TaskView taskView1, TaskView taskView2) {
+            int dateComparison = taskView1.getTask().getDueDate().compareTo(taskView2.getTask().getDueDate());
+            if (dateComparison != 0) {
+                return dateComparison;
+            }
+            return taskView1.getTask().getDueTime().compareTo(taskView2.getTask().getDueTime());
+        }
+    }
+    
+    // Comparator for events
+    private class EventComparator implements Comparator<EventView> {
+        @Override
+        public int compare(EventView eventView1, EventView eventView2) {
+            int dateComparison = eventView1.getEvent().getStartDate().compareTo(eventView2.getEvent().getStartDate());
+            if (dateComparison != 0) {
+                return dateComparison;
+            }
+            return eventView1.getEvent().getStartTime().compareTo(eventView2.getEvent().getStartTime());
+        }
+    }
+
+    // Comparator for combined list (tasks and events)
+    private class CombinedComparator implements Comparator<Component> {
+        @Override
+        public int compare(Component o1, Component o2) {
+        	// If both are TaskViews, use TaskComparator
+            if (o1 instanceof TaskView && o2 instanceof TaskView) {
+                return new TaskComparator().compare((TaskView) o1, (TaskView) o2);
+            }
+
+            // If both are EventViews, use EventComparator
+            if (o1 instanceof EventView && o2 instanceof EventView) {
+                return new EventComparator().compare((EventView) o1, (EventView) o2);
+            }
+
+            // If one is TaskView and the other is EventView, compare based on start date/time
+            LocalDate date1 = null;
+            LocalTime time1 = null;
+            LocalDate date2 = null;
+            LocalTime time2 = null;
+
+            if (o1 instanceof TaskView) {
+                date1 = ((TaskView) o1).getTask().getDueDate();
+                time1 = ((TaskView) o1).getTask().getDueTime();
+            } else if (o1 instanceof EventView) {
+                date1 = ((EventView) o1).getEvent().getStartDate();
+                time1 = ((EventView) o1).getEvent().getStartTime();
+            }
+
+            if (o2 instanceof TaskView) {
+                date2 = ((TaskView) o2).getTask().getDueDate();
+                time2 = ((TaskView) o2).getTask().getDueTime();
+            } else if (o2 instanceof EventView) {
+                date2 = ((EventView) o2).getEvent().getStartDate();
+                time2 = ((EventView) o2).getEvent().getStartTime();
+            }
+
+            // Compare dates first, then times if dates are equal
+            int dateComparison = date1.compareTo(date2);
+            if (dateComparison != 0) {
+                return dateComparison;
+            }
+            return time1.compareTo(time2);
+        }
+    }        
 
 	public List<TaskView> getTaskViews() {
 		return taskViews;
@@ -164,6 +214,11 @@ public class MainModel {
 
 	public List<EventView> getEventViews() {
 		return eventViews;
+	}
+	
+	public void setFilterBy(ViewOption filter) {
+		filterBy = filter;
+		System.out.println("porco dio");
 	}
     
 }

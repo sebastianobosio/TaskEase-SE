@@ -2,6 +2,7 @@ package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.taskmanager.view.TaskView;
+import com.mycompany.taskmanager.view.ViewOption;
 import com.mycompany.taskmanager.view.DetailedEventView;
 import com.mycompany.taskmanager.view.DetailedTaskView;
 import com.mycompany.taskmanager.view.EventView;
@@ -26,6 +27,7 @@ public class MainController {
         // Attach action listeners to buttons
         mainView.getCreateTaskButton().addActionListener(new CreateTaskButtonListener());
         mainView.getCreateEventButton().addActionListener(new CreateEventButtonListener());
+        mainView.getFilterByComboBox().addActionListener(new ChangeViewFilterListener());
     }
     
     public void initializeMainView() {
@@ -51,4 +53,15 @@ public class MainController {
         	EventController eventController = new EventController(detailedEventView, mainView);
         }
     }
+    
+    private class ChangeViewFilterListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        	ViewOption selectedOption = (ViewOption) mainView.getFilterByComboBox().getSelectedItem();
+            // Perform actions based on the selected option
+            mainModel.setFilterBy(selectedOption);
+            mainView.updateContentPanel();
+        }
+    }
 }
+

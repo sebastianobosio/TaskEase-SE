@@ -112,7 +112,7 @@ public class DetailedEventView extends JFrame {
     	try {
             return LocalDate.parse(startDateField.getText(), dateFormatter);
         } catch (DateTimeParseException e) {
-            System.out.println("Error parsing due date: " + e.getMessage());
+            System.out.println("Error parsing start date: " + e.getMessage());
             return null;
         }
     }
@@ -123,9 +123,9 @@ public class DetailedEventView extends JFrame {
     		return null;
     	}
     	try {
-            return LocalTime.parse(startTimeField.getText(), dateFormatter);
+            return LocalTime.parse(startTimeField.getText(), timeFormatter);
         } catch (DateTimeParseException e) {
-            System.out.println("Error parsing due date: " + e.getMessage());
+            System.out.println("Error parsing start time: " + e.getMessage());
             return null;
         }
     }
@@ -138,7 +138,7 @@ public class DetailedEventView extends JFrame {
     	try {
             return LocalDate.parse(endDateField.getText(), dateFormatter);
         } catch (DateTimeParseException e) {
-            System.out.println("Error parsing due date: " + e.getMessage());
+            System.out.println("Error parsing end date: " + e.getMessage());
             return null;
         }
     }
@@ -149,9 +149,9 @@ public class DetailedEventView extends JFrame {
     		return null;
     	}
     	try {
-            return LocalTime.parse(endTimeField.getText(), dateFormatter);
+            return LocalTime.parse(endTimeField.getText(), timeFormatter);
         } catch (DateTimeParseException e) {
-            System.out.println("Error parsing due date: " + e.getMessage());
+            System.out.println("Error parsing end date: " + e.getMessage());
             return null;
         }
     }
