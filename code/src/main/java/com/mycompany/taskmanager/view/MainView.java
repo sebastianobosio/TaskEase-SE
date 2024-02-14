@@ -16,10 +16,12 @@ import com.mycompany.taskmanager.model.Event;
 import com.mycompany.taskmanager.model.MainModel;
 
 public class MainView extends JPanel{  
+	
     private MainModel mainModel;
     private JButton createTaskButton;
     private JButton createEventButton;
     private JPanel contentPanel;
+    private JComboBox<ViewOption> filterByComboBox;
     
     public MainView(MainModel mainModel) {
         // Initialize components
@@ -36,8 +38,12 @@ public class MainView extends JPanel{
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         createTaskButton = new JButton("Create Task");
         createEventButton = new JButton("Create Event");
+        ViewOption[] options = {ViewOption.TASKS, ViewOption.EVENTS, ViewOption.BOTH};
+        filterByComboBox = new JComboBox<>(options);
+        filterByComboBox.setSelectedItem(ViewOption.BOTH); // Set "Both" as the default selection
         buttonPanel.add(createTaskButton);
         buttonPanel.add(createEventButton);
+        buttonPanel.add(filterByComboBox);
         
         // Set up layout
         setLayout(new BorderLayout());
@@ -67,7 +73,7 @@ public class MainView extends JPanel{
     public void updateContentPanel() {
         // Clear the existing content panel
     	
-    	List<Component> combinedList = mainModel.getTaskEventList();
+    	List<Component> combinedList = mainModel.fetchData();
         contentPanel.removeAll();
         
         GridBagConstraints constraints = new GridBagConstraints();
@@ -109,5 +115,9 @@ public class MainView extends JPanel{
 
     public JButton getCreateEventButton() {
         return createEventButton;
+    }
+    
+    public JComboBox<ViewOption> getFilterByComboBox() {
+    	return filterByComboBox;
     }
 }
