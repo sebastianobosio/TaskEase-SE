@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycompany.taskmanager.model.Task;
-import com.mycompany.taskmanager.model.Task.TaskStatus;
+import com.mycompany.taskmanager.model.TaskStatus;
 
 public class SQLiteTaskDAO implements TaskDAO{
 
@@ -74,15 +74,21 @@ public class SQLiteTaskDAO implements TaskDAO{
 	            LocalTime dueTime = LocalTime.parse(resultSet.getString("due_time"), DateTimeFormatter.ofPattern("HH:mm"));
 	            String statusAsString = resultSet.getString("status");
 	            System.out.println(statusAsString);
-	            TaskStatus status = null;
-	    		if (statusAsString.equals("Completed")) {
-	    			status = TaskStatus.COMPLETED;
-	    	    } else if (statusAsString.equals("Not Started")) {
-	    	    	System.out.println("i'm here");
-	    	    	status = TaskStatus.NOTSTARTED;
-	    	    } else if (statusAsString.equals("In Progress")) {
-	    	    	status = TaskStatus.ONGOING;
-	    	    }
+	            TaskStatus status;
+	            switch (statusAsString) {
+	                case "Completed":
+	                    status = TaskStatus.COMPLETED;
+	                    break;
+	                case "Not Started":
+	                    System.out.println("I'm here");
+	                    status = TaskStatus.NOTSTARTED;
+	                    break;
+	                case "In Progress":
+	                    status = TaskStatus.ONGOING;
+	                    break;
+	                default:
+	                    throw new IllegalArgumentException("Invalid status string: " + statusAsString);
+	            }
 	            tasks.add(new Task(id, name, description, dueDate, dueTime, status));
 	        }
 	    } catch (SQLException e) {

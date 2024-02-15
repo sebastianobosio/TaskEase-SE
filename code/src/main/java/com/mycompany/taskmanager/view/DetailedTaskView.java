@@ -76,7 +76,7 @@ public class DetailedTaskView extends JFrame {
         descriptionArea.setText(task.getDescription());
         dueDateField.setText(task.getFormattedDueDate());
         dueTimeField.setText(task.getFormattedDueTime());
-        statusComboBox.setSelectedItem(task.getStatus());
+        statusComboBox.setSelectedItem(task.getStatus().toString());
     }
 	
     // Method to read the value of titleField
