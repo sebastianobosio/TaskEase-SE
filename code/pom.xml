@@ -1,7 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yourcompany</groupId>
   <artifactId>TaskEase</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>TaskEase</name>
+  
+  	<properties>
+    	<maven.compiler.source>21</maven.compiler.source>
+    	<maven.compiler.target>21</maven.compiler.target>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  	</properties>
+  
+ 	<dependencies>
+  		<dependency>
+    		<groupId>org.xerial</groupId>
+    		<artifactId>sqlite-jdbc</artifactId>
+    		<version>3.42.0.0</version>
+		</dependency>
+		<dependency>
+	    	<groupId>org.apache.logging.log4j</groupId>
+	    	<artifactId>log4j-api</artifactId>
+	    	<version>2.22.1</version>
+	 	</dependency>
+	 	<dependency>
+	    	<groupId>org.apache.logging.log4j</groupId>
+	    	<artifactId>log4j-core</artifactId>
+	    	<version>2.22.1</version>
+	  	</dependency>
+	  	<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>4.13.2</version>
+    		<scope>test</scope>
+		</dependency>
+  	</dependencies>
+  
 </project>
+
+
