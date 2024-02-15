@@ -5,11 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 
 public class Task {
-	public enum TaskStatus {
-		COMPLETED,
-		ONGOING,
-		NOTSTARTED,	
-	}
 	
 	private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -100,19 +95,18 @@ public class Task {
         return dueTime.format(timeFormatter);
     }
 
-	public String getStatus() {
-	    String statusString = null;
-	    
-	    if (status == TaskStatus.COMPLETED) {
-	        statusString = "Completed";
-	    } else if (status == TaskStatus.NOTSTARTED) {
-	        statusString = "Not Started";
-	    } else if (status == TaskStatus.ONGOING) {
-	        statusString = "In Progress";
-	    }
-	    
-	    return statusString;
-	}  
+    public String getStatus() {
+        switch (status) {
+            case COMPLETED:
+                return TaskStatus.COMPLETED.toString();
+            case NOTSTARTED:
+                return TaskStatus.NOTSTARTED.toString();
+            case ONGOING:
+                return TaskStatus.ONGOING.toString();
+            default:
+                throw new IllegalStateException("Unexpected status: " + status);
+        }
+    }
 
 	public void setStatus(TaskStatus status) {
 		this.status = status;

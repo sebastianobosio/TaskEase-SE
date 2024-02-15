@@ -3,7 +3,7 @@ package com.mycompany.taskmanager.controller;
 import com.mycompany.taskmanager.view.TaskView;
 import com.mycompany.database.SQLiteTaskDAO;
 import com.mycompany.taskmanager.model.Task;
-import com.mycompany.taskmanager.model.Task.TaskStatus;
+import com.mycompany.taskmanager.model.TaskStatus;
 import com.mycompany.taskmanager.view.DetailedTaskView;
 import com.mycompany.taskmanager.view.MainView;
 
@@ -124,7 +124,7 @@ public class TaskController{
     		mainView.addTaskView(newTaskWithID);
 		}
 
-		private boolean validateFields(String title, String statusAsString, LocalDate dueDate, LocalTime dueTime) {
+		public boolean validateFields(String title, String statusAsString, LocalDate dueDate, LocalTime dueTime) {
 			
 			String message = null;
 			

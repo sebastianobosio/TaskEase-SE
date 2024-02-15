@@ -4,7 +4,6 @@ import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.taskmanager.view.MainView;
 import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.taskmanager.model.Event;
-import com.mycompany.taskmanager.model.Task.TaskStatus;
 import com.mycompany.taskmanager.view.DetailedEventView;
 
 import java.awt.event.MouseEvent;
