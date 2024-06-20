@@ -9,14 +9,22 @@ public class SQLiteDB {
    
 	public static final String DB_REL_FILE = "../db/tasks_events.db3";
 	public static final String DB_URL = "jdbc:sqlite:" + DB_REL_FILE;
-	
-    static {
-    	try {
+    private static SQLiteDB instance;
+    
+    private SQLiteDB() {
+        try {
             createDatabase();
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1); // Exit application if database creation fails
         }
+    }
+    
+    public static SQLiteDB getInstance() {
+        if (instance == null) {
+        	instance = new SQLiteDB();
+        }
+        return instance;
     }
 
     private static void createDatabase() throws SQLException {

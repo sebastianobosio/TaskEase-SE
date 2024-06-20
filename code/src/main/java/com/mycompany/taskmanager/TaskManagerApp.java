@@ -24,11 +24,12 @@ public class TaskManagerApp {
         
         // Initialize the DB
         try {
-        	SQLiteDB.getConnection(); // Initialize database connection
-        	System.out.println("Database initialized successfully.");
+            SQLiteDB dbInstance = SQLiteDB.getInstance(); // Get the singleton instance
+            dbInstance.getConnection(); // Initialize database connection
+            System.out.println("Database initialized successfully.");
         } catch (SQLException e) {
-        	e.printStackTrace();
-        	System.exit(1); // Exit application if database initialization fails
+            e.printStackTrace();
+            System.exit(1); // Exit application if database initialization fails
         }
         
         mainController.initializeMainView();
