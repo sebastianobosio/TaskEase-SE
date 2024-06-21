@@ -130,7 +130,7 @@ public class DetailedTaskView extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridy++;
 
-	    // Date and Time panel setup
+	    // Date, Time and Status panel setup
 	    JPanel dateTimePanel = new JPanel(new GridBagLayout());
 	    dateTimePanel.setBackground(new Color(173, 216, 230));
 	    GridBagConstraints gbcDateTime = new GridBagConstraints();
@@ -156,8 +156,17 @@ public class DetailedTaskView extends JFrame {
 	    dateTimePanel.add(dueTimeSpinner, gbcDateTime);
 	    gbcDateTime.gridx = 0;
 	    gbcDateTime.gridy++;
+	    
+	    // Status
+	    JLabel statusLabel = new JLabel("Status:");
+	    startTimeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	    dateTimePanel.add(statusLabel, gbcDateTime);
+	    gbcDateTime.gridx++;
+	    dateTimePanel.add(statusComboBox, gbcDateTime);
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy++;
 
-	    // Add date and time panel to main panel
+	    // Add date, time and status panel to main panel
 	    gbc.gridx = 0;
 	    gbc.gridwidth = 2;
 	    gbc.fill = GridBagConstraints.HORIZONTAL;

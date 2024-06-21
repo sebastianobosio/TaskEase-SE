@@ -24,11 +24,14 @@ public class MainView extends JPanel{
     	
         contentPanel = new JPanel(); // Panel to hold task and event views        
         contentPanel.setBackground(new Color(240, 240, 240));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // inner gap for the content panel
         
         //create content panel for task and events
         contentPanel.setLayout(new GridBagLayout());
-        JScrollPane scrollPane = new JScrollPane(contentPanel);  
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUI(new CustomScrollBarUI());
              
         //create panel for buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
@@ -54,6 +57,7 @@ public class MainView extends JPanel{
         
         JLabel titleLabel = new JLabel("Task and Event Manager");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Set up layout
         setLayout(new BorderLayout());
@@ -104,17 +108,12 @@ public class MainView extends JPanel{
         	}
         	// if current cmp due/start date is different from the previous task/event due/start date than add a separator
         	if (previousCmpDate != null && !currentCmpDate.equals(previousCmpDate)) {
-        	    JPanel separatorPanel = new JPanel(new BorderLayout());
-        	    JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        	    
-        	    // Set separator properties
-        	    separator.setForeground(new Color(100, 100, 100)); // Set separator color to red
-        	    
-        	    separatorPanel.add(separator, BorderLayout.CENTER);
-        	    
-        	    // Add the separator panel with constraints
-        	    contentPanel.add(separatorPanel, constraints);
-        		constraints.gridy++;
+                JPanel separatorPanel = new JPanel(new BorderLayout());
+                separatorPanel.setBackground(new Color(255, 200, 100));
+                separatorPanel.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 2));
+                
+                contentPanel.add(separatorPanel, constraints);
+                constraints.gridy++;
             }
         	previousCmpDate = currentCmpDate;
         	contentPanel.add(cmp, constraints);
