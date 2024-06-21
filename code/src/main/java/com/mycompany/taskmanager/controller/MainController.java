@@ -1,16 +1,12 @@
 package com.mycompany.taskmanager.controller;
 
 import com.mycompany.taskmanager.view.MainView;
-import com.mycompany.taskmanager.view.TaskView;
 import com.mycompany.taskmanager.view.ViewOption;
 import com.mycompany.taskmanager.view.DetailedEventView;
 import com.mycompany.taskmanager.view.DetailedTaskView;
-import com.mycompany.taskmanager.view.EventView;
 import com.mycompany.database.SQLiteEventDAO;
 import com.mycompany.database.SQLiteTaskDAO;
-import com.mycompany.taskmanager.model.Event;
 import com.mycompany.taskmanager.model.MainModel;
-import com.mycompany.taskmanager.model.Task;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
