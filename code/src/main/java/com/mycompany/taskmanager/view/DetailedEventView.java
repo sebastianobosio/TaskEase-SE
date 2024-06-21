@@ -1,6 +1,7 @@
 package com.mycompany.taskmanager.view;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,8 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
@@ -52,62 +51,189 @@ public class DetailedEventView extends JFrame {
 	
 	private void initializeFrame() {
         setTitle("Detailed View");
-        setSize(400, 300);
+        setSize(600, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 	
-	private void initializeComponents() {
-        titleField = new JTextField();
-        descriptionArea = new JTextArea("", 5, 20);
-        locationArea = new JTextArea("", 5, 20);
-        saveButton = new JButton("Save");
-        deleteButton = new JButton("Delete");
-        
-        //date picker
-        Properties properties = new Properties();
-        properties.put("text.today", "Today");
-        properties.put("text.month", "Month");
-        properties.put("text.year", "Year");
-        UtilDateModel startDateModel = new UtilDateModel();
-        UtilDateModel endDateModel = new UtilDateModel();
-        JDatePanelImpl startDatePanel = new JDatePanelImpl(startDateModel, properties);
-        JDatePanelImpl endDatePanel = new JDatePanelImpl(endDateModel, properties);
-        startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter());
-        endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter());
-        
-        //time picker
-        SpinnerDateModel startSpinnerModel = new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY);
-        SpinnerDateModel endSpinnerModel = new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY);
-        startTimeSpinner = new JSpinner(startSpinnerModel);
-        endTimeSpinner = new JSpinner(endSpinnerModel);
-        JSpinner.DateEditor startTimeEditor = new JSpinner.DateEditor(startTimeSpinner, "HH:mm");
-        JSpinner.DateEditor endTimeEditor = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
-        startTimeSpinner.setEditor(startTimeEditor);
-        endTimeSpinner.setEditor(endTimeEditor);
-
-        // Set up the layout
-        JPanel panel = new JPanel(new GridLayout(9, 2));
-        panel.add(new JLabel("Title:"));
-        panel.add(titleField);
-        panel.add(new JLabel("Description:"));
-        panel.add(new JScrollPane(descriptionArea));
-        panel.add(new JLabel("Start Date (dd-MM-yyyy):"));
-        panel.add(startDatePicker);
-        panel.add(new JLabel("Start Time (HH:mm):"));
-        panel.add(startTimeSpinner);
-        panel.add(new JLabel("End Date (dd-MM-yyyy):"));
-        panel.add(endDatePicker);
-        panel.add(new JLabel("End Time (HH:mm):"));
-        panel.add(endTimeSpinner);
-        panel.add(new JLabel("Location"));
-        panel.add(locationArea);
-        panel.add(saveButton);
-        panel.add(deleteButton);
-        
-        add(panel);
-    }
 	
+	private void initializeComponents() {
+	    // Text fields and text areas
+	    titleField = new JTextField();
+	    descriptionArea = new JTextArea(3, 10);
+	    locationArea = new JTextArea(3, 10);
+
+	    // Set font for title field
+	    titleField.setFont(new Font("Arial", Font.BOLD, 16));
+	    titleField.setBackground(new Color(240, 240, 240));
+	    titleField.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+	    // Set font, border and background for description field
+	    descriptionArea.setFont(new Font("Arial", Font.PLAIN, 14));
+	    descriptionArea.setBackground(new Color(240, 240, 240));
+	    descriptionArea.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+	    // Set font, border and background for location field
+	    locationArea.setFont(new Font("Arial", Font.PLAIN, 14));
+	    locationArea.setBackground(new Color(240, 240, 240));
+	    locationArea.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 2));
+
+	    
+	    // Buttons
+	    saveButton = new JButton("Save");
+	    saveButton.setBackground(new Color(240, 240, 240));
+	    deleteButton = new JButton("Delete");
+	    deleteButton.setBackground(new Color(240, 240, 240));
+
+	    // Date picker setup
+	    Properties properties = new Properties();
+	    properties.put("text.today", "Today");
+	    properties.put("text.month", "Month");
+	    properties.put("text.year", "Year");
+
+	    UtilDateModel startDateModel = new UtilDateModel();
+	    UtilDateModel endDateModel = new UtilDateModel();
+
+	    JDatePanelImpl startDatePanel = new JDatePanelImpl(startDateModel, properties);
+	    JDatePanelImpl endDatePanel = new JDatePanelImpl(endDateModel, properties);
+
+	    startDatePicker = new JDatePickerImpl(startDatePanel, new DateLabelFormatter());
+	    startDatePicker.setBackground(new Color(240, 240, 240));
+	    endDatePicker = new JDatePickerImpl(endDatePanel, new DateLabelFormatter());
+	    endDatePicker.setBackground(new Color(240, 240, 240));
+	    
+	    // Time picker setup
+	    SpinnerDateModel startSpinnerModel = new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY);
+	    SpinnerDateModel endSpinnerModel = new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY);
+
+	    startTimeSpinner = new JSpinner(startSpinnerModel);
+	    endTimeSpinner = new JSpinner(endSpinnerModel);
+
+	    JSpinner.DateEditor startTimeEditor = new JSpinner.DateEditor(startTimeSpinner, "HH:mm");
+	    JSpinner.DateEditor endTimeEditor = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
+
+	    startTimeSpinner.setEditor(startTimeEditor);
+	    endTimeSpinner.setEditor(endTimeEditor);
+
+	    // Set the background color of the JFormattedTextField inside the spinner editor
+	    JFormattedTextField startTimeTextField = ((JSpinner.DefaultEditor) startTimeSpinner.getEditor()).getTextField();
+	    startTimeTextField.setBackground(new Color(240, 240, 240));
+
+	    JFormattedTextField endTimeTextField = ((JSpinner.DefaultEditor) endTimeSpinner.getEditor()).getTextField();
+	    endTimeTextField.setBackground(new Color(240, 240, 240));
+
+	    // Main panel setup with GridBagLayout for more control
+	    JPanel mainPanel = new JPanel(new GridBagLayout());
+	    mainPanel.setBackground(new Color(240, 240, 240));
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.gridx = 0;
+	    gbc.gridy = 0;
+	    gbc.anchor = GridBagConstraints.WEST;
+	    gbc.insets = new Insets(5, 10, 5, 10); // Padding
+
+	    // Title
+	    JLabel titleLabel = new JLabel("Title:");
+	    titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+	    gbc.gridwidth = 2;
+	    gbc.fill = GridBagConstraints.BOTH;
+	    mainPanel.add(titleLabel, gbc);
+	    gbc.gridy++;
+	    mainPanel.add(titleField, gbc);
+	    gbc.gridx = 0;
+	    gbc.gridy++;
+
+	    // Description
+	    JLabel descriptionLabel = new JLabel("Description:");
+        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        mainPanel.add(descriptionLabel, gbc);
+        gbc.gridy++;
+        mainPanel.add(new JScrollPane(descriptionArea), gbc);
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy++;
+
+        // Location
+        JLabel locationLabel = new JLabel("Location:");
+        locationLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        mainPanel.add(locationLabel, gbc);
+        gbc.gridy++;
+        mainPanel.add(new JScrollPane(locationArea), gbc);
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy++;
+
+	    // Date and Time panel setup
+	    JPanel dateTimePanel = new JPanel(new GridBagLayout());
+	    dateTimePanel.setBackground(new Color(144, 238, 144));
+	    GridBagConstraints gbcDateTime = new GridBagConstraints();
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy = 0;
+	    gbcDateTime.anchor = GridBagConstraints.WEST;
+	    gbcDateTime.insets = new Insets(5, 10, 5, 10); // Padding
+
+	    // Start Date
+	    JLabel startDateLabel = new JLabel("Start Date:");
+	    startDateLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	    dateTimePanel.add(startDateLabel, gbcDateTime);
+	    gbcDateTime.gridx++;
+	    dateTimePanel.add(startDatePicker, gbcDateTime);
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy++;
+
+	    // Start Time
+	    JLabel startTimeLabel = new JLabel("Start Time:");
+	    startTimeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	    dateTimePanel.add(startTimeLabel, gbcDateTime);
+	    gbcDateTime.gridx++;
+	    dateTimePanel.add(startTimeSpinner, gbcDateTime);
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy++;
+
+	    // End Date
+	    JLabel endDateLabel = new JLabel("End Date:");
+	    endDateLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	    dateTimePanel.add(endDateLabel, gbcDateTime);
+	    gbcDateTime.gridx++;
+	    dateTimePanel.add(endDatePicker, gbcDateTime);
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy++;
+
+	    // End Time
+	    JLabel endTimeLabel = new JLabel("End Time:");
+	    endTimeLabel.setFont(new Font("Arial", Font.BOLD, 14));
+	    dateTimePanel.add(endTimeLabel, gbcDateTime);
+	    gbcDateTime.gridx++;
+	    dateTimePanel.add(endTimeSpinner, gbcDateTime);
+	    gbcDateTime.gridx = 0;
+	    gbcDateTime.gridy++;
+
+	    // Add date and time panel to main panel
+	    gbc.gridx = 0;
+	    gbc.gridwidth = 2;
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    mainPanel.add(dateTimePanel, gbc);
+	    gbc.gridy++;
+
+	    // Button panel setup
+	    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 10));
+        buttonPanel.setBackground(new Color(100, 100, 100));
+
+	    buttonPanel.add(saveButton);
+	    buttonPanel.add(deleteButton);
+
+	    // Add button panel to main panel
+	    gbc.anchor = GridBagConstraints.CENTER;
+	    gbc.gridwidth = 2;
+	    gbc.gridy++;
+	    mainPanel.add(buttonPanel, gbc);
+
+	    // Add main panel to the current container (assuming it's a JPanel or similar)
+	    add(mainPanel);
+	}
+
+
 	private void populateFields() {
         titleField.setText(event.getTitle());
         descriptionArea.setText(event.getDescription());
